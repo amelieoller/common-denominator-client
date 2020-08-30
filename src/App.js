@@ -6,25 +6,29 @@ import { theme } from "./theme";
 import GlobalStyle from "./GlobalStyle";
 import CategoriesPage from "./CategoriesPage/CategoriesPage";
 import Navbar from "./Navbar/Navbar";
+import HomePage from "./HomePage/HomePage";
+import { CategoriesProvider } from "./context/CategoriesContext";
 
 const App = () => (
-  <Router>
-    <ThemeProvider theme={theme}>
-      <StyledApp>
-        <GlobalStyle />
+  <CategoriesProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <StyledApp>
+          <GlobalStyle />
 
-        <Navbar />
+          <Navbar />
 
-        <StyledMain>
-          <Switch>
-            <Route path="/categories" component={CategoriesPage} />
-            <Route exact path="/" render={() => "Home Page"} />
-            <Route>Page Not Found</Route>
-          </Switch>
-        </StyledMain>
-      </StyledApp>
-    </ThemeProvider>
-  </Router>
+          <StyledMain>
+            <Switch>
+              <Route path="/categories" component={CategoriesPage} />
+              <Route exact path="/" component={HomePage} />
+              <Route>Page Not Found</Route>
+            </Switch>
+          </StyledMain>
+        </StyledApp>
+      </ThemeProvider>
+    </Router>
+  </CategoriesProvider>
 );
 
 const StyledApp = styled.div`

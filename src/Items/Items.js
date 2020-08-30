@@ -5,13 +5,13 @@ import styled from "styled-components/macro";
 import ItemTile from "../ItemTile/ItemTile";
 import NewItem from "../NewItem/NewItem";
 
-const Items = ({ categoryId, items }) => (
+const Items = ({ items }) => (
   <StyledItems>
     {items.map((item) => (
       <ItemTile item={item} key={item.id} />
     ))}
 
-    <NewItem categoryId={categoryId} />
+    <NewItem />
   </StyledItems>
 );
 
@@ -21,7 +21,6 @@ const StyledItems = styled.div`
 `;
 
 Items.propTypes = {
-  categoryId: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

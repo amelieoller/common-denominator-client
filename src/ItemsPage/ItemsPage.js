@@ -4,18 +4,27 @@ import styled from "styled-components/macro";
 
 import Items from "../Items/Items";
 
-const ItemsPage = ({ categoryId }) => {
-  const [items, setItems] = useState([]);
+const ItemsPage = ({ match }) => {
+  const [items, setItems] = useState(null);
+  const categorySlug = match.params.slug.toLowerCase();
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/categories/${categoryId}/items`)
+    fetch(
+      `${process.env.REACT_APP_SERVER_URL}/categories/${categorySlug}/items`
+    )
       .then((resp) => resp.json())
-      .then((data) => setItems(data));
-  }, [categoryId]);
+      .then((data) => {
+        if (data.errors) {
+          setItems([]);
+        } else {
+          setItems(data);
+        }
+      });
+  }, [categorySlug]);
 
-  return items.length ? (
+  return items ? (
     <StyledItemsPage>
-      <Items categoryId={categoryId} items={items} />
+      <Items items={items} />
     </StyledItemsPage>
   ) : (
     "loading"

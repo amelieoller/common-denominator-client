@@ -4,16 +4,23 @@ import styled from "styled-components/macro";
 
 import CategoryTile from "../CategoryTile/CategoryTile";
 import NewCategory from "../NewCategory/NewCategory";
+import useCategories from "../hooks/useCategories";
 
-const Categories = ({ categories }) => (
-  <StyledCategories>
-    {categories.map((category) => (
-      <CategoryTile category={category} key={category.id} />
-    ))}
+const Categories = () => {
+  const { categories } = useCategories();
 
-    <NewCategory />
-  </StyledCategories>
-);
+  return categories ? (
+    <StyledCategories>
+      {categories.map((category) => (
+        <CategoryTile category={category} key={category.id} />
+      ))}
+
+      <NewCategory />
+    </StyledCategories>
+  ) : (
+    "loading"
+  );
+};
 
 const StyledCategories = styled.div`
   display: grid;

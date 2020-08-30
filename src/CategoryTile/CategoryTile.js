@@ -3,19 +3,18 @@ import PropTypes from "prop-types";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 
-const CategoryTile = ({ category }) => {
-  const handleDelete = () => {
-    const options = { method: "DELETE" };
-    const url = `${process.env.REACT_APP_SERVER_URL}/categories/${category.id}`;
+import useCategories from "../hooks/useCategories";
 
-    fetch(url, options)
-      .then((resp) => resp.json())
-      .then((data) => console.log(data));
+const CategoryTile = ({ category }) => {
+  const { deleteCategory } = useCategories();
+
+  const handleDelete = () => {
+    deleteCategory(category.id);
   };
 
   return (
     <StyledCategoryTile>
-      <Link to={`categories/${category.title.toLowerCase()}`}>
+      <Link to={`categories/${category.slug}`}>
         <span>{category.title}</span>
       </Link>
 

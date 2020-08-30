@@ -1,33 +1,26 @@
 import React from "react";
 import styled from "styled-components/macro";
 
-import useFormInput from "../hooks/useForm";
+import useFormInput from "../hooks/useFormInput";
+import useCategories from "../hooks/useCategories";
 
 const NewCategory = () => {
-  const title = useFormInput("");
+  const { addCategory } = useCategories();
+
+  const [title, bindTitle, resetTitle] = useFormInput("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const url = `${process.env.REACT_APP_SERVER_URL}/categories`;
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title: title.value, user_id: 2 }),
-    };
+    if (!title) return;
 
-    fetch(url, options)
-      .then((resp) => resp.json())
-      .then(({ newCategory }) => {
-        console.log(newCategory);
-      });
+    addCategory({ title, user_id: 2 });
+    resetTitle();
   };
 
   return (
     <StyledNewCategory onSubmit={handleSubmit}>
-      <input type="text" placeholder="Add new category" {...title} />
+      <input type="text" placeholder="Add new category" {...bindTitle} />
     </StyledNewCategory>
   );
 };
