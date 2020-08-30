@@ -1,1 +1,1 @@
-export default "./NewCategory";
+export default "./NewItem";

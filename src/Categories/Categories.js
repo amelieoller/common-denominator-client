@@ -1,33 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/macro";
 
-import Category from "../Category/Category";
+import CategoryTile from "../CategoryTile/CategoryTile";
 import NewCategory from "../NewCategory/NewCategory";
 
-const Categories = () => {
-  const [categories, setCategories] = useState([]);
+const Categories = ({ categories }) => (
+  <StyledCategories>
+    {categories.map((category) => (
+      <CategoryTile category={category} key={category.id} />
+    ))}
 
-  useEffect(() => {
-    const url = `${process.env.REACT_APP_SERVER_URL}/categories`;
-
-    fetch(url)
-      .then((resp) => resp.json())
-      .then(({ data }) => {
-        setCategories(data);
-      });
-  }, []);
-
-  return (
-    <StyledCategories>
-      {categories.map((category) => (
-        <Category key={category.id} category={category} />
-      ))}
-
-      <NewCategory />
-    </StyledCategories>
-  );
-};
+    <NewCategory />
+  </StyledCategories>
+);
 
 const StyledCategories = styled.div`
   display: grid;
@@ -35,6 +21,23 @@ const StyledCategories = styled.div`
   grid-gap: ${({ theme }) => theme.padding};
 `;
 
-Categories.propTypes = {};
+Categories.propTypes = {
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      items: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          title: PropTypes.string.isRequired,
+          currentUserRating: PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            value: PropTypes.number.isRequired,
+          }),
+        })
+      ).isRequired,
+    })
+  ).isRequired,
+};
 
 export default Categories;

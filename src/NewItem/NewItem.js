@@ -1,42 +1,42 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components/macro";
 
 import useFormInput from "../hooks/useForm";
 
-const NewCategory = () => {
+const NewItem = ({ categoryId }) => {
   const title = useFormInput("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const url = `${process.env.REACT_APP_SERVER_URL}/categories`;
+    const url = `${process.env.REACT_APP_SERVER_URL}/categories/${categoryId}/items`;
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title: title.value, user_id: 2 }),
+      body: JSON.stringify({ title: title.value, category_id: categoryId }),
     };
 
     fetch(url, options)
       .then((resp) => resp.json())
-      .then(({ newCategory }) => {
-        console.log(newCategory);
+      .then(({ item }) => {
+        console.log(item);
       });
   };
 
   return (
-    <StyledNewCategory onSubmit={handleSubmit}>
-      <input type="text" placeholder="Add new category" {...title} />
-    </StyledNewCategory>
+    <StyledNewItem onSubmit={handleSubmit}>
+      <input type="text" placeholder="Add new item" {...title} />
+    </StyledNewItem>
   );
 };
 
-const StyledNewCategory = styled.form`
+const StyledNewItem = styled.form`
   border-radius: ${({ theme }) => theme.borderRadius};
   background: tomato;
   padding: ${({ theme }) => theme.padding};
-  height: 200px;
   display: flex;
   align-items: flex-end;
 
@@ -53,6 +53,8 @@ const StyledNewCategory = styled.form`
   }
 `;
 
-NewCategory.propTypes = {};
+NewItem.propTypes = {
+  categoryId: PropTypes.number.isRequired,
+};
 
-export default NewCategory;
+export default NewItem;
