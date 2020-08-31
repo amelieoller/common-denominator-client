@@ -1,43 +1,73 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { ThemeProvider } from "styled-components/macro";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 
 import { theme } from "./theme";
 import GlobalStyle from "./GlobalStyle";
 import CategoriesPage from "./CategoriesPage/CategoriesPage";
 import Navbar from "./Navbar/Navbar";
-import HomePage from "./HomePage/HomePage";
-import { CategoriesProvider } from "./context/CategoriesContext";
 import useAuth from "./hooks/useAuth";
+import Login from "./Login/Login";
+import GetStarted from "./GetStarted/GetStarted";
+import useCategories from "./hooks/useCategories";
 
 const App = () => {
-  const { getCurrentUser } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const { getCurrentUser, user } = useAuth();
+  const { getCategories } = useCategories();
 
   useEffect(() => {
-    getCurrentUser();
+    getCurrentUser().then(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      getCategories(user.token);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   return (
-    <CategoriesProvider>
-      <Router>
-        <ThemeProvider theme={theme}>
-          <StyledApp>
-            <GlobalStyle />
+    <Router>
+      <ThemeProvider theme={theme}>
+        <StyledApp>
+          <GlobalStyle />
 
-            <Navbar />
+          {!loading ? (
+            <>
+              <Navbar />
 
-            <StyledMain>
-              <Switch>
-                <Route path="/categories" component={CategoriesPage} />
-                <Route exact path="/" component={HomePage} />
-                <Route>Page Not Found</Route>
-              </Switch>
-            </StyledMain>
-          </StyledApp>
-        </ThemeProvider>
-      </Router>
-    </CategoriesProvider>
+              <StyledMain>
+                {!user ? (
+                  <Switch>
+                    <Route exact path="/" component={Login} />
+                    <Redirect
+                      to={{
+                        pathname: "/",
+                      }}
+                    />
+                  </Switch>
+                ) : (
+                  <Switch>
+                    <Route path="/categories" component={CategoriesPage} />
+                    <Route exact path="/" component={GetStarted} />
+                    <Route>Page Not Found</Route>
+                  </Switch>
+                )}
+              </StyledMain>
+            </>
+          ) : (
+            "loading"
+          )}
+        </StyledApp>
+      </ThemeProvider>
+    </Router>
   );
 };
 

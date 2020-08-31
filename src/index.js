@@ -4,11 +4,14 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 import { AuthProvider } from "./context/AuthContext";
+import { CategoriesProvider } from "./context/CategoriesContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <CategoriesProvider>
+        <App />
+      </CategoriesProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById("root")

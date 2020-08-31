@@ -1,7 +1,7 @@
 const categoriesReducer = (categories, action) => {
   switch (action.type) {
     // Categories
-    case "GET_CATEGORIES": {
+    case "SET_CATEGORIES": {
       return action.categories;
     }
     case "ADD_CATEGORY": {

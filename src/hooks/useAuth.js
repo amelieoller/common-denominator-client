@@ -17,7 +17,7 @@ const useAuth = () => {
 
     dispatch({
       type: "SET_USER",
-      user: data.user,
+      user: { ...data.user, token: data.token },
     });
   };
 
@@ -50,7 +50,7 @@ const useAuth = () => {
   };
 
   const getCurrentUser = () => {
-    fetchGetCurrentUser().then((data) => {
+    return fetchGetCurrentUser().then((data) => {
       if (data.errors) {
         console.log(data.errors);
       } else {

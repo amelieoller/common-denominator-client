@@ -2,20 +2,12 @@ import { API_ROOT, headers } from "./index";
 
 const baseUrl = `${API_ROOT}/categories`;
 
-const getCategories = () => {
-  const options = {
-    headers: headers(),
-  };
-  debugger;
+const fetchGetCategories = (token) => {
+  const options = { headers: { ...headers(), Authorization: token } };
+
   return fetch(baseUrl, options)
     .then((resp) => resp.json())
-    .then((data) => {
-      if (data.errors) {
-        console.log(data.errors);
-      } else {
-        return data;
-      }
-    })
+    .then((data) => data)
     .catch((error) => console.log(error));
 };
 
@@ -41,4 +33,4 @@ const fetchPostCategory = (category) => {
     .catch((error) => console.log(error));
 };
 
-export { getCategories, fetchDeleteCategory, fetchPostCategory };
+export { fetchGetCategories, fetchDeleteCategory, fetchPostCategory };

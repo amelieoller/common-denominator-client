@@ -44,7 +44,7 @@ Categories.propTypes = {
         })
       ).isRequired,
     })
-  ).isRequired,
+  ),
 };
 
 export default Categories;

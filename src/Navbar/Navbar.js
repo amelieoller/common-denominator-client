@@ -14,11 +14,14 @@ const Navbar = () => {
         </Link>
 
         <ul className="pure-menu-list">
-          <li className="pure-menu-item">
-            <Link to="/categories" className="pure-menu-link">
-              Categories
-            </Link>
-          </li>
+          {user && (
+            <li className="pure-menu-item">
+              <Link to="/categories" className="pure-menu-link">
+                Categories
+              </Link>
+            </li>
+          )}
+
           <li className="pure-menu-item">
             {user ? (
               <Link to="/" className="pure-menu-link" onClick={logout}>

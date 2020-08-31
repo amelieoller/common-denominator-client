@@ -5,7 +5,7 @@ import styled from "styled-components/macro";
 import useFormInput from "../hooks/useFormInput";
 import useAuth from "../hooks/useAuth";
 
-const HomePage = () => {
+const Login = () => {
   const { login, signup } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
@@ -32,26 +32,24 @@ const HomePage = () => {
   };
 
   return (
-    <StyledHomePage>
+    <StyledLogin>
       <h1>{isLogin ? "Login" : "Signup"}</h1>
-
       <form onSubmit={isLogin ? handleLogin : handleSignup}>
         <input type="text" placeholder="username" {...bindUsername} />
         <input type="password" placeholder="password" {...bindPassword} />
         <input type="submit" value={isLogin ? "Login" : "Signup"} />
       </form>
-
       <p onClick={() => setIsLogin((prevLogin) => !prevLogin)}>
         {isLogin
           ? "Don't have an account yet? Click here to sign up!"
           : "Already have an account? Click here to log in!"}
       </p>
-    </StyledHomePage>
+    </StyledLogin>
   );
 };
 
-const StyledHomePage = styled.div``;
+const StyledLogin = styled.div``;
 
-HomePage.propTypes = {};
+Login.propTypes = {};
 
-export default HomePage;
+export default Login;

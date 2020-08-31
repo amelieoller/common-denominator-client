@@ -1,7 +1,11 @@
 import React from "react";
 
 import { CategoriesContext } from "../context/CategoriesContext";
-import { fetchPostCategory, fetchDeleteCategory } from "../api/category";
+import {
+  fetchPostCategory,
+  fetchDeleteCategory,
+  fetchGetCategories,
+} from "../api/category";
 import {
   fetchPostItem,
   fetchDeleteItem,
@@ -19,6 +23,16 @@ const useCategories = () => {
   const [categories, dispatch] = context;
 
   // Categories
+  const getCategories = (token) => {
+    fetchGetCategories(token).then((data) => {
+      if (data.errors) {
+        console.log(data.errors);
+      } else {
+        dispatch({ type: "SET_CATEGORIES", categories: data });
+      }
+    });
+  };
+
   const addCategory = (category) => {
     fetchPostCategory(category).then((data) => {
       if (data.errors) {
@@ -93,6 +107,7 @@ const useCategories = () => {
     deleteItem,
     updateItem,
     updateItemRating,
+    getCategories,
   };
 };
 

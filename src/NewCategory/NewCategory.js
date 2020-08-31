@@ -14,7 +14,7 @@ const NewCategory = () => {
 
     if (!title) return;
 
-    addCategory({ title, user_id: 2 });
+    addCategory({ title });
     resetTitle();
   };
 
