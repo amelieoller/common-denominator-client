@@ -4,29 +4,19 @@ import styled from "styled-components/macro";
 
 import useFormInput from "../hooks/useFormInput";
 import { withRouter } from "react-router-dom";
+import useCategories from "../hooks/useCategories";
 
-const NewItem = ({ match: { params } }) => {
+const NewItem = ({ category }) => {
+  const { addItem } = useCategories();
+
   const [title, bindTitle, resetTitle] = useFormInput("");
-
-  const categorySlug = params.slug.toLowerCase();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const url = `${process.env.REACT_APP_SERVER_URL}/categories/${categorySlug}/items`;
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title: title, category_id: categorySlug }),
-    };
+    if (!title) return;
 
-    fetch(url, options)
-      .then((resp) => resp.json())
-      .then(({ item }) => {
-        console.log(item);
-      });
+    addItem(category.id, { title, category_id: category.id });
 
     resetTitle();
   };

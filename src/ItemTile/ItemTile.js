@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/macro";
+import useCategories from "../hooks/useCategories";
 
-const ItemTile = ({ categoryId, item }) => {
+const ItemTile = ({ item }) => {
+  const { deleteItem, updateItem, updateItemRating } = useCategories();
+
   const [title, setTitle] = useState(item.title);
   const [rating, setRating] = useState(item.currentUserRating.value);
 
   const handleDelete = () => {
-    const options = { method: "DELETE" };
-    const url = `${process.env.REACT_APP_SERVER_URL}/categories/${categoryId}/items/${item.id}`;
-
-    fetch(url, options)
-      .then((resp) => resp.json())
-      .then((data) => console.log(data));
+    deleteItem(item);
   };
 
   const handleOnTitleChange = (e) => {
@@ -26,32 +24,13 @@ const ItemTile = ({ categoryId, item }) => {
   const handleOnTitleBlur = () => {
     if (item.title === title) return;
 
-    const options = {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, rating }),
-    };
-    const url = `${process.env.REACT_APP_SERVER_URL}/categories/${categoryId}/items/${item.id}`;
-
-    fetch(url, options)
-      .then((resp) => resp.json())
-      .then((data) => console.log(data));
+    updateItem({ ...item, title });
   };
 
   const handleOnRatingBlur = () => {
     if (item.currentUserRating.value === rating) return;
 
-    const options = {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ value: rating, itemId: item.id, user_id: 1 }),
-    };
-
-    const url = `${process.env.REACT_APP_SERVER_URL}/categories/${categoryId}/items/${item.id}/ratings/${item.currentUserRating.id}`;
-
-    fetch(url, options)
-      .then((resp) => resp.json())
-      .then((data) => console.log(data));
+    updateItemRating(item, { ...item.currentUserRating, value: +rating });
   };
 
   return (
@@ -60,12 +39,16 @@ const ItemTile = ({ categoryId, item }) => {
         value={title}
         onChange={handleOnTitleChange}
         onBlur={handleOnTitleBlur}
+        type="text"
       />
 
       <input
         value={rating}
         onChange={handleOnRatingChange}
         onBlur={handleOnRatingBlur}
+        type="number"
+        max={10}
+        min={0}
       />
 
       <StyledButton className="pure-button" onClick={handleDelete}>

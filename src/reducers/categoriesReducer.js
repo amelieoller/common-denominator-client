@@ -1,5 +1,6 @@
 const categoriesReducer = (categories, action) => {
   switch (action.type) {
+    // Categories
     case "GET_CATEGORIES": {
       return action.categories;
     }
@@ -14,6 +15,63 @@ const categoriesReducer = (categories, action) => {
         c.id === action.category.id ? action.category : c
       );
     }
+
+    // Items
+    case "ADD_ITEM": {
+      return categories.map((c) => {
+        if (c.id === action.item.categoryId) {
+          return { ...c, items: [...c.items, action.item] };
+        } else {
+          return c;
+        }
+      });
+    }
+    case "DELETE_ITEM": {
+      return categories.map((c) => {
+        if (c.id === action.item.categoryId) {
+          return {
+            ...c,
+            items: c.items.filter((i) => i.id !== action.item.id),
+          };
+        } else {
+          return c;
+        }
+      });
+    }
+    case "UPDATE_ITEM": {
+      return categories.map((c) => {
+        if (c.id === action.item.categoryId) {
+          return {
+            ...c,
+            items: c.items.map((i) =>
+              i.id === action.item.id ? action.item : i
+            ),
+          };
+        } else {
+          return c;
+        }
+      });
+    }
+    case "UPDATE_ITEM_RATING": {
+      return categories.map((c) => {
+        if (c.id === action.item.categoryId) {
+          return {
+            ...c,
+            items: c.items.map((i) =>
+              i.id === action.item.id
+                ? {
+                    ...i,
+                    currentUserRating: action.rating,
+                  }
+                : i
+            ),
+          };
+        } else {
+          return c;
+        }
+      });
+    }
+
     default: {
       throw new Error(`Unsupported action type: ${action.type}`);
     }

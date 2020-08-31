@@ -5,13 +5,13 @@ import styled from "styled-components/macro";
 import ItemTile from "../ItemTile/ItemTile";
 import NewItem from "../NewItem/NewItem";
 
-const Items = ({ items }) => (
+const Items = ({ category }) => (
   <StyledItems>
-    {items.map((item) => (
+    {category.items.map((item) => (
       <ItemTile item={item} key={item.id} />
     ))}
 
-    <NewItem />
+    <NewItem category={category} />
   </StyledItems>
 );
 
