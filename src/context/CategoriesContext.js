@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import categoriesReducer from "../reducers/categoriesReducer";
-import { API_ROOT } from "../api";
+import { API_ROOT, headers } from "../api";
 
 const url = `${API_ROOT}/categories`;
 const CategoriesContext = React.createContext();
@@ -13,7 +13,9 @@ const CategoriesProvider = (props) => {
 
   useEffect(() => {
     console.log("fetching categories");
-    fetch(url)
+    const options = { headers: headers() };
+
+    fetch(url, options)
       .then((resp) => resp.json())
       .then((categories) => {
         if (categories.errors) {

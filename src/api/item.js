@@ -3,7 +3,7 @@ import { API_ROOT, headers } from "./index";
 const baseUrl = `${API_ROOT}/categories`;
 
 const fetchDeleteItem = (item) => {
-  const options = { method: "DELETE" };
+  const options = { method: "DELETE", headers: headers() };
 
   return fetch(`${baseUrl}/${item.categoryId}/items/${item.id}`, options)
     .then((resp) => resp.json())

@@ -2,8 +2,12 @@ import { API_ROOT, headers } from "./index";
 
 const baseUrl = `${API_ROOT}/categories`;
 
-const getCategories = () =>
-  fetch(baseUrl)
+const getCategories = () => {
+  const options = {
+    headers: headers(),
+  };
+  debugger;
+  return fetch(baseUrl, options)
     .then((resp) => resp.json())
     .then((data) => {
       if (data.errors) {
@@ -13,9 +17,10 @@ const getCategories = () =>
       }
     })
     .catch((error) => console.log(error));
+};
 
 const fetchDeleteCategory = (categoryId) => {
-  const options = { method: "DELETE" };
+  const options = { method: "DELETE", headers: headers() };
 
   return fetch(`${baseUrl}/${categoryId}`, options)
     .then((resp) => resp.json())

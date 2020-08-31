@@ -1,8 +1,11 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+
   return (
     <StyledNavbar>
       <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
@@ -17,9 +20,15 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="pure-menu-item">
-            <Link to="/" className="pure-menu-link">
-              Login
-            </Link>
+            {user ? (
+              <Link to="/" className="pure-menu-link" onClick={logout}>
+                Logout
+              </Link>
+            ) : (
+              <Link to="/" className="pure-menu-link">
+                Login
+              </Link>
+            )}
           </li>
         </ul>
       </div>
