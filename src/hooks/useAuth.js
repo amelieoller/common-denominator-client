@@ -21,14 +21,6 @@ const useAuth = () => {
     });
   };
 
-  const logUserOut = () => {
-    localStorage.removeItem("token");
-
-    dispatch({
-      type: "REMOVE_USER",
-    });
-  };
-
   const signup = (user) => {
     fetchSignup(user).then((data) => {
       if (data.errors) {
@@ -60,7 +52,15 @@ const useAuth = () => {
   };
 
   const logout = () => {
-    logUserOut();
+    localStorage.removeItem("token");
+
+    dispatch({
+      type: "REMOVE_USER",
+    });
+  };
+
+  const addFriend = (userId, friendUsername) => {
+    debugger;
   };
 
   return {
@@ -69,6 +69,7 @@ const useAuth = () => {
     getCurrentUser,
     signup,
     logout,
+    addFriend,
   };
 };
 

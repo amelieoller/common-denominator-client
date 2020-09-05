@@ -7,6 +7,8 @@ import NewItem from "../NewItem/NewItem";
 
 const Items = ({ category }) => (
   <StyledItems>
+    <h1>{category.title}</h1>
+
     {category.items.map((item) => (
       <ItemTile item={item} key={item.id} />
     ))}
@@ -34,7 +36,7 @@ Items.propTypes = {
         title: PropTypes.string.isRequired,
       }).isRequired,
     })
-  ).isRequired,
+  ),
 };
 
 export default Items;

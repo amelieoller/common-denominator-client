@@ -3,37 +3,37 @@ import PropTypes from "prop-types";
 
 import useFormInput from "../hooks/useFormInput";
 import { withRouter } from "react-router-dom";
-import useCategories from "../hooks/useCategories";
+import useAuth from "../hooks/useAuth";
 import Tile from "../Tile/Tile";
 
-const NewItem = ({ category }) => {
-  const { addItem } = useCategories();
+const NewFriend = () => {
+  const { user, addFriend } = useAuth();
 
-  const [title, bindTitle, resetTitle] = useFormInput("");
+  const [friendName, bindFriendName, resetFriendName] = useFormInput("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title) return;
+    if (!friendName) return;
 
-    addItem(category.id, { title, category_id: category.id });
+    addFriend(user.id, friendName);
 
-    resetTitle();
+    resetFriendName();
   };
 
   return (
     <Tile>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Add new item" {...bindTitle} />
+        <input type="text" placeholder="Add new friend" {...bindFriendName} />
       </form>
     </Tile>
   );
 };
 
-NewItem.propTypes = {
+NewFriend.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({ slug: PropTypes.string }),
   }).isRequired,
 };
 
-export default withRouter(NewItem);
+export default withRouter(NewFriend);

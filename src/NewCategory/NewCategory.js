@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components/macro";
 
 import useFormInput from "../hooks/useFormInput";
 import useCategories from "../hooks/useCategories";
+import Tile from "../Tile/Tile";
 
 const NewCategory = () => {
   const { addCategory } = useCategories();
@@ -19,32 +19,13 @@ const NewCategory = () => {
   };
 
   return (
-    <StyledNewCategory onSubmit={handleSubmit}>
-      <input type="text" placeholder="Add new category" {...bindTitle} />
-    </StyledNewCategory>
+    <Tile>
+      <form onSubmit={handleSubmit}>
+        <input type="text" placeholder="Add new category" {...bindTitle} />
+      </form>
+    </Tile>
   );
 };
-
-const StyledNewCategory = styled.form`
-  border-radius: ${({ theme }) => theme.borderRadius};
-  background: tomato;
-  padding: ${({ theme }) => theme.padding};
-  height: 200px;
-  display: flex;
-  align-items: flex-end;
-
-  input {
-    background: transparent;
-    color: ${({ theme }) => theme.onBackground};
-    border-radius: ${({ theme }) => theme.borderRadiusSmall};
-    border: 1px solid;
-    padding: 4px 8px;
-  }
-
-  input::placeholder {
-    color: ${({ theme }) => theme.onBackground};
-  }
-`;
 
 NewCategory.propTypes = {};
 

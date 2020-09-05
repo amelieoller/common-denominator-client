@@ -10,13 +10,16 @@ const Categories = () => {
   const { categories } = useCategories();
 
   return categories ? (
-    <StyledCategories>
-      {categories.map((category) => (
-        <CategoryTile category={category} key={category.id} />
-      ))}
+    <>
+      <h1>Categories</h1>
+      <StyledCategories>
+        {categories.map((category) => (
+          <CategoryTile category={category} key={category.id} />
+        ))}
 
-      <NewCategory />
-    </StyledCategories>
+        <NewCategory />
+      </StyledCategories>
+    </>
   ) : (
     "loading"
   );

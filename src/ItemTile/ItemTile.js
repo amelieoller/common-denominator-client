@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/macro";
+
 import useCategories from "../hooks/useCategories";
+import Tile from "../Tile/Tile";
 
 const ItemTile = ({ item }) => {
   const { deleteItem, updateItem, updateItemRating } = useCategories();
@@ -34,7 +36,7 @@ const ItemTile = ({ item }) => {
   };
 
   return (
-    <StyledItemTile>
+    <Tile>
       <input
         value={title}
         onChange={handleOnTitleChange}
@@ -51,45 +53,12 @@ const ItemTile = ({ item }) => {
         min={0}
       />
 
-      <StyledButton className="pure-button" onClick={handleDelete}>
+      <button className="pure-button" onClick={handleDelete}>
         <i className="fas fa-trash"></i>
-      </StyledButton>
-    </StyledItemTile>
+      </button>
+    </Tile>
   );
 };
-
-const StyledItemTile = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  border-radius: ${({ theme }) => theme.borderRadius};
-  background: tomato;
-  padding: ${({ theme }) => theme.padding};
-
-  a {
-    color: ${({ theme }) => theme.onBackground};
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  input {
-    background: transparent;
-    border: none;
-    color: ${({ theme }) => theme.onBackground};
-    width: 100px;
-  }
-`;
-
-const StyledButton = styled.button`
-  background: transparent;
-  border: 1px solid;
-  border-radius: ${({ theme }) => theme.borderRadiusSmall};
-  padding: 3px 6px;
-  color: ${({ theme }) => theme.onBackground};
-  font-size: 12px;
-`;
 
 ItemTile.propTypes = {};
 

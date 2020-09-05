@@ -15,11 +15,19 @@ const Navbar = () => {
 
         <ul className="pure-menu-list">
           {user && (
-            <li className="pure-menu-item">
-              <Link to="/categories" className="pure-menu-link">
-                Categories
-              </Link>
-            </li>
+            <>
+              <li className="pure-menu-item">
+                <Link to="/categories" className="pure-menu-link">
+                  Categories
+                </Link>
+              </li>
+
+              <li className="pure-menu-item">
+                <Link to="/friends" className="pure-menu-link">
+                  Friends
+                </Link>
+              </li>
+            </>
           )}
 
           <li className="pure-menu-item">

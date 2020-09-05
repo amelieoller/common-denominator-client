@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 
 import useCategories from "../hooks/useCategories";
+import Tile from "../Tile/Tile";
 
 const CategoryTile = ({ category }) => {
   const { deleteCategory } = useCategories();
@@ -13,44 +13,17 @@ const CategoryTile = ({ category }) => {
   };
 
   return (
-    <StyledCategoryTile>
+    <Tile>
       <Link to={`categories/${category.slug}`}>
         <span>{category.title}</span>
       </Link>
 
-      <StyledButton className="pure-button" onClick={handleDelete}>
+      <button className="pure-button" onClick={handleDelete}>
         <i className="fas fa-trash"></i>
-      </StyledButton>
-    </StyledCategoryTile>
+      </button>
+    </Tile>
   );
 };
-
-const StyledCategoryTile = styled.div`
-  height: 200px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  border-radius: ${({ theme }) => theme.borderRadius};
-  background: tomato;
-  padding: ${({ theme }) => theme.padding};
-
-  a {
-    color: ${({ theme }) => theme.onBackground};
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
-const StyledButton = styled.button`
-  background: transparent;
-  border: 1px solid;
-  border-radius: ${({ theme }) => theme.borderRadiusSmall};
-  padding: 3px 6px;
-  color: ${({ theme }) => theme.onBackground};
-  font-size: 12px;
-`;
 
 CategoryTile.propTypes = {
   category: PropTypes.shape({

@@ -15,6 +15,7 @@ import useAuth from "./hooks/useAuth";
 import Login from "./Login/Login";
 import GetStarted from "./GetStarted/GetStarted";
 import useCategories from "./hooks/useCategories";
+import FriendsPage from "./FriendsPage/FriendsPage";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -56,6 +57,7 @@ const App = () => {
                 ) : (
                   <Switch>
                     <Route path="/categories" component={CategoriesPage} />
+                    <Route path="/friends" component={FriendsPage} />
                     <Route exact path="/" component={GetStarted} />
                     <Route>Page Not Found</Route>
                   </Switch>

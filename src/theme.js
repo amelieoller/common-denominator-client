@@ -3,6 +3,7 @@ export const theme = {
   onBackground: "#FFFFFF",
   padding: "15px",
   borderRadius: "10px",
+  borderRadiusSmall: "6px",
   // onBackgroundLight: "#A4A6B3",
   // primary: "#7059ff",
   // primaryFaded: "#8f74ff8a",
