@@ -23,8 +23,13 @@ const NewFriend = () => {
 
   return (
     <Tile>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Add new friend" {...bindFriendName} />
+      <form onSubmit={handleSubmit} className="pure-form">
+        <fieldset>
+          <input {...bindFriendName} type="text" placeholder="Add New Friend" />
+          <button type="submit" className="pure-button">
+            Add
+          </button>
+        </fieldset>
       </form>
     </Tile>
   );

@@ -23,8 +23,13 @@ const NewItem = ({ category }) => {
 
   return (
     <Tile>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Add new item" {...bindTitle} />
+      <form onSubmit={handleSubmit} className="pure-form">
+        <fieldset>
+          <input {...bindTitle} type="text" placeholder="Add New Item" />
+          <button type="submit" className="pure-button">
+            Add
+          </button>
+        </fieldset>
       </form>
     </Tile>
   );

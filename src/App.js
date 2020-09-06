@@ -44,7 +44,7 @@ const App = () => {
             <>
               <Navbar />
 
-              <StyledMain>
+              <div className="splash-container">
                 {!user ? (
                   <Switch>
                     <Route exact path="/" component={Login} />
@@ -58,11 +58,14 @@ const App = () => {
                   <Switch>
                     <Route path="/categories" component={CategoriesPage} />
                     <Route path="/friends" component={FriendsPage} />
-                    <Route exact path="/" component={GetStarted} />
-                    <Route>Page Not Found</Route>
+                    <Redirect
+                      to={{
+                        pathname: "/friends",
+                      }}
+                    />
                   </Switch>
                 )}
-              </StyledMain>
+              </div>
             </>
           ) : (
             "loading"

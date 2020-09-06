@@ -7,26 +7,16 @@ export default styled.createGlobalStyle`
   ${reset}
 
   body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     background: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.onBackground};
-  }
-
-/* 
-  html {
-    font-size: 16px;
-    height: 100%;
-  }
-
-  body {
-    font-family: "Montserrat";
-    background: ${({ theme }) => theme.background};
-    color: ${({ theme }) => theme.onBackground};
+    line-height: 1.7em;
+    font-size: 13px;
   }
 
   * {
-    margin: 0;
-    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
 
@@ -36,9 +26,11 @@ export default styled.createGlobalStyle`
   h3,
   h4,
   h5,
-  h6 {
+  h6,
+  label {
     font-family: "Open Sans";
     font-weight: bold;
+    color: #34495e;
   }
 
   h1 {
@@ -76,209 +68,292 @@ export default styled.createGlobalStyle`
     margin-bottom: 2.33em;
   }
 
-  /* General */
-  p {
-    margin-top: 1em;
-    margin-bottom: 1em;
-    font-size: 1em;
-    line-height: 1.2;
-  }
-
-  svg {
-    height: 24px;
-    width: 24px;
-  }
-
-  strong {
-    font-weight: bold;
-  }
-
-  em {
-    font-style: italic;
-  }
-
-  blockquote {
-    background: ${({ theme }) => theme.surfaceTwo};
-    padding: 0.4em 12px;
-
-    position: relative;
-    border-left: 4px solid ${({ theme }) => theme.primaryFaded};
-    margin-bottom: 1em;
-  }
-
-  blockquote p {
-    display: inline;
-  }
-
-  a {
-    color: ${({ theme }) => theme.primary};
-    text-decoration: none;
-    background-position: 0 93%;
-    background-repeat: repeat-x;
-    background-size: 100% 0.15em;
-    cursor: pointer;
-
-    &:hover {
-      color: ${({ theme }) => theme.primaryFaded};
-    }
-  }
-
-  hr {
-    margin-top: 2em;
-    margin-bottom: 2em;
-    height: 1px;
-    background: ${({ theme }) => theme.borderColor};
-    border: none;
-
-    + h2 {
-      border: none;
-      padding-top: 0;
-    }
-  }
-
-  img {
+  .pure-img-responsive {
     max-width: 100%;
+    height: auto;
   }
 
-  table {
-    margin-bottom: 2em;
-    font-size: 1.1em;
-    border-collapse: collapse;
+  /*
+ * -- LAYOUT STYLES --
+ * These are some useful classes which I will need
+ */
+  .l-box {
+    padding: 1em;
+  }
+
+  .l-box-lrg {
+    padding: 2em;
+  }
+
+  .is-center {
+    text-align: center;
+  }
+
+  /*
+ * -- PURE FORM STYLES --
+ * Style the form inputs and labels
+ */
+  .pure-form label {
+    margin: 1em 0 0;
+    font-weight: bold;
+    font-size: 100%;
+  }
+
+  .pure-form input[type] {
+    border: 2px solid #ddd;
+    box-shadow: none;
+    font-size: 100%;
     width: 100%;
-    overflow-y: auto;
-    _overflow: auto;
-
-    th {
-      font-weight: 700;
-      padding: 10px;
-      border-bottom: 1px solid ${({ theme }) => theme.borderColor};
-
-      &:not([align]) {
-        text-align: left;
-      }
-    }
-
-    td {
-      padding: 10px;
-      border-bottom: 1px solid ${({ theme }) => theme.borderColor};
-      color: inherit;
-    }
-  }
-
-  /* Code and Code Blocks */
-  pre {
-    display: block;
-    overflow-x: auto;
-    background: ${({ theme }) => theme.surfaceTwo};
-    color: rgb(204, 204, 204);
-    padding: 0.5em;
     margin-bottom: 1em;
   }
 
-  & *:first-child {
-    margin-top: 0 !important;
+  /*
+ * -- PURE BUTTON STYLES --
+ * I want my pure-button elements to look a little different
+ */
+  .pure-button {
+    /* background-color: #1f8dd6;
+    color: white;
+    padding: 0.5em 2em;
+    border-radius: 5px; */
   }
 
-  code[class*="language-"],
-  pre[class*="language-"] {
-    font-family: "Source Code Pro", monospace;
-    text-align: left;
-    white-space: pre;
-    word-spacing: normal;
-    word-break: normal;
-    word-wrap: normal;
-    tab-size: 2;
-    hyphens: none;
+  a.pure-button-primary {
+    /* background: white;
+    color: #1f8dd6;
+    border-radius: 5px;
+    font-size: 120%; */
   }
 
-  pre[class*="language-"] {
-    background-color: ${({ theme }) => theme.surfaceTwo};
+  .button-success,
+  .button-error,
+  .button-warning,
+  .button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
   }
 
-  code {
-    font-size: 85%;
-    background: ${({ theme }) => theme.codeBackground};
-    padding: 0.2em 0.4em;
-    border-radius: 3px;
-    font-weight: 300;
-    font-size: 85%;
-    font-weight: normal;
-    /* background-color: rgba(9, 30, 66, 0.08); */
-    font-family: SFMono-Medium, "SF Mono", "Segoe UI Mono", "Roboto Mono",
-      "Ubuntu Mono", Menlo, Consolas, Courier, monospace;
-    white-space: pre-wrap;
-    box-shadow: rgba(9, 30, 66, 0.08) -4px 0px 0px 0px,
-      rgba(9, 30, 66, 0.08) 4px 0px 0px 0px;
-    padding: 2px 0px;
-    border-style: none;
-    margin: 0px 4px;
+  .button-success {
+    background: rgb(28, 184, 65);
+    /* this is a green */
   }
 
-  pre code {
-    background: transparent;
-    padding: 0;
-    line-height: 1.15em;
-    box-shadow: none;
-    margin: 0;
+  .button-error {
+    background: rgb(202, 60, 60);
+    /* this is a maroon */
   }
 
-  /* Lists */
-  ol,
-  ul {
-    list-style: none;
-    margin-bottom: 2rem;
+  .button-warning {
+    background: rgb(223, 117, 20);
+    /* this is an orange */
+  }
 
-    li {
-      padding-left: 27px;
-      position: relative;
-      margin-bottom: 3px;
-      line-height: 1.1;
+  .button-secondary {
+    background: rgb(66, 184, 221);
+    /* this is a light blue */
+  }
 
-      > * {
-        margin-bottom: 10px;
-      }
+  /*
+ * -- MENU STYLES --
+ * I want to customize how my .pure-menu looks at the top of the page
+ */
 
-      ol,
-      ul {
-        margin: 7px 0 0;
-      }
+  .home-menu {
+    padding: 0.5em;
+    text-align: center;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  }
+  .home-menu {
+    background: #2d3e50;
+  }
+  .pure-menu.pure-menu-fixed {
+    /* Fixed menus normally have a border at the bottom. */
+    border-bottom: none;
+    /* I need a higher z-index here because of the scroll-over effect. */
+    z-index: 4;
+  }
 
-      p:last-child {
-        margin: 0;
-      }
+  .home-menu .pure-menu-heading {
+    color: white;
+    font-weight: 400;
+    font-size: 120%;
+  }
+
+  .home-menu .pure-menu-selected a {
+    color: white;
+  }
+
+  .home-menu .pure-menu-selected a:visited {
+    color: white;
+  }
+
+  .home-menu a {
+    color: #6fbef3;
+  }
+  .home-menu li a:hover,
+  .home-menu li a:focus {
+    background: none;
+    border: none;
+    color: #aecfe5;
+  }
+
+  /*
+ * -- SPLASH STYLES --
+ * This is the blue top section that appears on the page.
+ */
+
+  .splash-container {
+    background: #1f8dd6;
+    z-index: 1;
+    overflow: hidden;
+    /* The following styles are required for the "scroll-over" effect */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed !important;
+    padding: 60px 0;
+    overflow: scroll;
+  }
+
+  .splash {
+    /* absolute center .splash within .splash-container */
+    width: 80%;
+    height: 50%;
+    margin: auto;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  /* This is the main heading that appears on the blue section */
+  .splash-head {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    border: 3px solid white;
+    padding: 1em 1.6em;
+    font-weight: 100;
+    border-radius: 5px;
+    line-height: 1em;
+  }
+
+  /* This is the subheading that appears on the blue section */
+  .splash-subhead {
+    color: white;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+  }
+
+  /*
+ * -- CONTENT STYLES --
+ * This represents the content area (everything below the blue section)
+ */
+  .content-wrapper {
+    /* These styles are required for the "scroll-over" effect */
+    position: absolute;
+    top: 87%;
+    width: 100%;
+    min-height: 12%;
+    z-index: 2;
+    background: white;
+  }
+
+  /* We want to give the content area some more padding */
+  .content {
+    padding: 1em 1em 3em;
+  }
+
+  /* This is the class used for the main content headers (<h2>) */
+  .content-head {
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 2em 0 1em;
+  }
+
+  /* This is a modifier class used when the content-head is inside a ribbon */
+  .content-head-ribbon {
+    color: white;
+  }
+
+  /* This is the class used for the content sub-headers (<h3>) */
+  .content-subhead {
+    color: #1f8dd6;
+  }
+  .content-subhead i {
+    margin-right: 7px;
+  }
+
+  /* This is the class used for the dark-background areas. */
+  .ribbon {
+    background: #2d3e50;
+    color: #aaa;
+  }
+
+  /* This is the class used for the footer */
+  .footer {
+    background: #111;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+  /*
+ * -- TABLET (AND UP) MEDIA QUERIES --
+ * On tablets and other medium-sized devices, we want to customize some
+ * of the mobile styles.
+ */
+  @media (min-width: 48em) {
+    /* We increase the body font size */
+    body {
+      font-size: 16px;
+    }
+
+    /* We can align the menu header to the left, but float the
+    menu items to the right. */
+    .home-menu {
+      text-align: left;
+    }
+    .home-menu ul {
+      float: right;
+    }
+
+    /* We increase the height of the splash-container */
+    /*    .splash-container {
+        height: 500px;
+    }*/
+
+    /* We decrease the width of the .splash, since we have more width
+    to work with */
+    .splash {
+      width: 50%;
+      height: 60%;
+    }
+
+    .splash-head {
+      font-size: 250%;
+    }
+
+    /* We remove the border-separator assigned to .l-box-lrg */
+    .l-box-lrg {
+      border: none;
     }
   }
 
-  ol {
-    counter-reset: b;
-
-    > li {
-      &:before {
-        content: counters(b, ".") " ";
-        counter-increment: b;
-        position: absolute;
-        left: -8px;
-        width: 29px;
-        color: ${({ theme }) => theme.onBackgroundLight};
-        text-align: right;
-      }
-
-      ol {
-        margin-left: 4px;
-      }
+  /*
+ * -- DESKTOP (AND UP) MEDIA QUERIES --
+ * On desktops and other large devices, we want to over-ride some
+ * of the mobile and tablet styles.
+ */
+  @media (min-width: 78em) {
+    /* We increase the header font size even more */
+    .splash-head {
+      font-size: 300%;
     }
   }
-
-  ul {
-    > li:before {
-      content: "";
-      position: absolute;
-      left: 12px;
-      top: 5px;
-      width: 6px;
-      height: 6px;
-      background-color: ${({ theme }) => theme.onBackgroundLight};
-      border-radius: 9999px;
-    }
-  } */
 `;

@@ -1,15 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import styled from "styled-components/macro";
 
 import Tile from "../Tile/Tile";
 
 const FriendTile = ({ friend }) => (
-  <Tile>
-    <Link to={`friends/${friend.slug}`}>
-      <span>{friend.username}</span>
-    </Link>
-  </Tile>
+  <Link to={`friends/${friend.slug}`}>
+    <Tile>
+      <h2>{friend.username}</h2>
+    </Tile>
+  </Link>
 );
 
 FriendTile.propTypes = {};

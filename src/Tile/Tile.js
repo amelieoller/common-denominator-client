@@ -7,40 +7,24 @@ const Tile = ({ children }) => {
 };
 
 const StyledItemTile = styled.div`
+  background: white;
+  height: 150px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   border-radius: ${({ theme }) => theme.borderRadius};
-  background: tomato;
   padding: ${({ theme }) => theme.padding};
 
+  h2 {
+    margin: 0;
+  }
+
   a {
-    color: ${({ theme }) => theme.onBackground};
-
-    &:hover {
-      text-decoration: underline;
-    }
+    cursor: pointer;
   }
 
-  input {
-    background: transparent;
-    color: ${({ theme }) => theme.onBackground};
-    border-radius: ${({ theme }) => theme.borderRadiusSmall};
-    border: 1px solid;
-    padding: 4px 8px;
-  }
-
-  input::placeholder {
-    color: ${({ theme }) => theme.onBackground};
-  }
-
-  button {
-    background: transparent;
-    border: 1px solid;
-    border-radius: ${({ theme }) => theme.borderRadiusSmall};
-    padding: 3px 6px;
-    color: ${({ theme }) => theme.onBackground};
-    font-size: 12px;
+  &:hover {
+    background: #eee;
   }
 `;
 

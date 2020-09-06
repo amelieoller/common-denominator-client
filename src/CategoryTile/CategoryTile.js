@@ -13,15 +13,15 @@ const CategoryTile = ({ category }) => {
   };
 
   return (
-    <Tile>
-      <Link to={`categories/${category.slug}`}>
-        <span>{category.title}</span>
-      </Link>
+    <Link to={`categories/${category.slug}`}>
+      <Tile>
+        <h2>{category.title}</h2>
 
-      <button className="pure-button" onClick={handleDelete}>
-        <i className="fas fa-trash"></i>
-      </button>
-    </Tile>
+        <button className="pure-button button-error" onClick={handleDelete}>
+          <i className="fas fa-trash"></i>
+        </button>
+      </Tile>
+    </Link>
   );
 };
 

@@ -7,22 +7,22 @@ const Navbar = () => {
   const { user, logout } = useAuth();
 
   return (
-    <StyledNavbar>
-      <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
-        <Link to="/" className="pure-menu-link pure-menu-heading">
-          Common Denominator
+    <div className="header">
+      <div className="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <Link to="/" className="pure-menu-heading">
+          {user ? `Hi ${user.username}!` : "Common Denominator"}
         </Link>
 
         <ul className="pure-menu-list">
           {user && (
             <>
-              <li className="pure-menu-item">
+              {/* <li className="pure-menu-item">
                 <Link to="/categories" className="pure-menu-link">
                   Categories
                 </Link>
-              </li>
+              </li> */}
 
-              <li className="pure-menu-item">
+              <li className="pure-menu-item pure-menu-selected">
                 <Link to="/friends" className="pure-menu-link">
                   Friends
                 </Link>
@@ -43,7 +43,7 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-    </StyledNavbar>
+    </div>
   );
 };
 

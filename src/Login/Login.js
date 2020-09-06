@@ -32,23 +32,76 @@ const Login = () => {
   };
 
   return (
-    <StyledLogin>
-      <h1>{isLogin ? "Login" : "Signup"}</h1>
-      <form onSubmit={isLogin ? handleLogin : handleSignup}>
-        <input type="text" placeholder="username" {...bindUsername} />
-        <input type="password" placeholder="password" {...bindPassword} />
-        <input type="submit" value={isLogin ? "Login" : "Signup"} />
+    <div className="splash">
+      <h2 className="content-head content-head-ribbon">
+        {isLogin ? "Login" : "Signup"}
+      </h2>
+
+      <form
+        onSubmit={isLogin ? handleLogin : handleSignup}
+        className="pure-form pure-form-stacked"
+      >
+        <fieldset>
+          {/* <label for="username">Your Username</label> */}
+          <input
+            {...bindUsername}
+            id="username"
+            type="text"
+            placeholder="Your Username"
+          />
+          {/* <label for="password">Your Password</label> */}
+          <input
+            {...bindPassword}
+            id="password"
+            type="password"
+            placeholder="Your Password"
+          />
+
+          <SignupOrLoginMessage>
+            {isLogin ? (
+              <>
+                Don't have an account yet?{" "}
+                <span
+                  onClick={() => setIsLogin((prevLogin) => !prevLogin)}
+                  className="link"
+                >
+                  Click here to sign up!
+                </span>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <span
+                  onClick={() => setIsLogin((prevLogin) => !prevLogin)}
+                  className="link"
+                >
+                  Click here to log in!
+                </span>
+              </>
+            )}
+          </SignupOrLoginMessage>
+
+          <button type="submit" className="pure-button">
+            {isLogin ? "Login" : "Signup"}
+          </button>
+        </fieldset>
       </form>
-      <p onClick={() => setIsLogin((prevLogin) => !prevLogin)}>
-        {isLogin
-          ? "Don't have an account yet? Click here to sign up!"
-          : "Already have an account? Click here to log in!"}
-      </p>
-    </StyledLogin>
+    </div>
   );
 };
 
-const StyledLogin = styled.div``;
+const SignupOrLoginMessage = styled.div`
+  margin-bottom: 15px;
+
+  .link {
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      color: #34495e;
+    }
+  }
+`;
 
 Login.propTypes = {};
 

@@ -4,22 +4,25 @@ import styled from "styled-components/macro";
 
 import ItemTile from "../ItemTile/ItemTile";
 import NewItem from "../NewItem/NewItem";
+import Tiles from "../Tiles/Tiles";
 
 const Items = ({ category }) => (
   <StyledItems>
-    <h1>{category.title}</h1>
+    <h1 className="content-head content-head-ribbon">{category.title}</h1>
 
-    {category.items.map((item) => (
-      <ItemTile item={item} key={item.id} />
-    ))}
+    <Tiles>
+      {category.items.map((item) => (
+        <ItemTile item={item} key={item.id} />
+      ))}
 
-    <NewItem category={category} />
+      <NewItem category={category} />
+    </Tiles>
   </StyledItems>
 );
 
 const StyledItems = styled.div`
-  display: grid;
-  grid-gap: ${({ theme }) => theme.padding};
+  width: 80%;
+  margin: 0 auto;
 `;
 
 Items.propTypes = {

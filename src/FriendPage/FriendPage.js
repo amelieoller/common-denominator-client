@@ -8,6 +8,7 @@ import Tile from "../Tile/Tile";
 import NewCategory from "../NewCategory/NewCategory";
 import useCategories from "../hooks/useCategories";
 import { Link } from "react-router-dom";
+import Tiles from "../Tiles/Tiles";
 
 const FriendPage = ({ match }) => {
   const [friend, setFriend] = useState(null);
@@ -43,30 +44,32 @@ const FriendPage = ({ match }) => {
 
   return friend ? (
     <StyledFriendPage>
-      <h1>
-        {friend.username} {"<>"} {user.username}
+      <h1 className="content-head content-head-ribbon">
+        {friend.username} {"&"} {user.username}
       </h1>
-      {customFriendshipId && categories && (
-        <>
-          <h2>Shared Categories</h2>
-          {categories.map((category) => (
-            <Tile key={category.id}>
-              <Link
-                to={`/friends/${friend.username}/categories/${category.slug}`}
-              >
-                <span>{category.title}</span>
-              </Link>
-              <button
-                className="pure-button"
-                onClick={() => handleDelete(category.id)}
-              >
-                <i className="fas fa-trash"></i>
-              </button>
-            </Tile>
-          ))}
 
+      <h2 className="content-head content-head-ribbon">Shared Categories</h2>
+
+      {customFriendshipId && categories && (
+        <Tiles>
+          {categories.map((category) => (
+            <Link
+              to={`/friends/${friend.username}/categories/${category.slug}`}
+              key={category.id}
+            >
+              <Tile>
+                <h2>{category.title}</h2>
+                <button
+                  className="pure-button button-error"
+                  onClick={() => handleDelete(category.id)}
+                >
+                  <i className="fas fa-trash"></i>
+                </button>
+              </Tile>
+            </Link>
+          ))}
           <NewCategory customFriendshipId={customFriendshipId} />
-        </>
+        </Tiles>
       )}
     </StyledFriendPage>
   ) : (

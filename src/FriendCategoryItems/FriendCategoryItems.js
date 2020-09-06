@@ -7,6 +7,8 @@ import { fetchGetCategory } from "../api/category";
 import { fetchGetFriendship, fetchGetResults } from "../api/friendship";
 import ItemTile from "../ItemTile/ItemTile";
 import NewItem from "../NewItem/NewItem";
+import Tiles from "../Tiles/Tiles";
+import Tile from "../Tile/Tile";
 
 const FriendCategoryItems = ({ match }) => {
   const [customFriendshipId, setCustomFriendshipId] = useState(null);
@@ -14,6 +16,7 @@ const FriendCategoryItems = ({ match }) => {
   const [category, setCategory] = useState(null);
   const [items, setItems] = useState(null);
   const [result, setResult] = useState(null);
+  const [friend, setFriend] = useState(null);
 
   const { user } = useAuth();
 
@@ -27,6 +30,8 @@ const FriendCategoryItems = ({ match }) => {
       setCustomFriendshipId(fs.customFriendshipId);
       setCategories(fs.categories);
     });
+
+    setFriend(foundFriend);
   }, [
     user,
     match.params.slug,
@@ -52,26 +57,56 @@ const FriendCategoryItems = ({ match }) => {
 
   return category && items ? (
     <StyledFriendCategoryItems>
-      <h1>{category.title}</h1>
+      <h1 className="content-head content-head-ribbon">
+        {friend.username} {"&"} {user.username}
+      </h1>
 
-      {items.map((item) => (
-        <ItemTile key={item.id} item={item}>
-          {item.title}
-        </ItemTile>
-      ))}
+      <h2 className="content-head content-head-ribbon">{category.title}</h2>
 
-      <NewItem category={category} />
+      {result ? (
+        <>
+          <Tile>
+            <h2>{result.title}</h2>
+          </Tile>
 
-      <button onClick={() => handleGetResults(category.id)}>Get Results</button>
+          <button
+            className="pure-button button-success results-button"
+            onClick={() => setResult(null)}
+          >
+            Reset
+          </button>
+        </>
+      ) : (
+        <>
+          <Tiles>
+            {items.map((item) => (
+              <ItemTile key={item.id} item={item}>
+                {item.title}
+              </ItemTile>
+            ))}
 
-      {result && <div>{result.title}</div>}
+            <NewItem category={category} />
+          </Tiles>
+
+          <button
+            className="pure-button button-success results-button"
+            onClick={() => handleGetResults(category.id)}
+          >
+            Get Results
+          </button>
+        </>
+      )}
     </StyledFriendCategoryItems>
   ) : (
     "loading"
   );
 };
 
-const StyledFriendCategoryItems = styled.div``;
+const StyledFriendCategoryItems = styled.div`
+  .results-button {
+    margin-top: 15px;
+  }
+`;
 
 FriendCategoryItems.propTypes = {
   match: PropTypes.shape({
