@@ -22,6 +22,10 @@ const useCategories = () => {
 
   const [categories, dispatch] = context;
 
+  const clearStorage = () => {
+    dispatch({ type: "CLEAR_STORAGE" });
+  };
+
   // Categories
   const getCategories = (token) => {
     fetchGetCategories(token).then((data) => {
@@ -108,6 +112,7 @@ const useCategories = () => {
     updateItem,
     updateItemRating,
     getCategories,
+    clearStorage,
   };
 };
 

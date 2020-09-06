@@ -4,7 +4,7 @@ import useFormInput from "../hooks/useFormInput";
 import useCategories from "../hooks/useCategories";
 import Tile from "../Tile/Tile";
 
-const NewCategory = () => {
+const NewCategory = ({ customFriendshipId }) => {
   const { addCategory } = useCategories();
 
   const [title, bindTitle, resetTitle] = useFormInput("");
@@ -14,7 +14,7 @@ const NewCategory = () => {
 
     if (!title) return;
 
-    addCategory({ title });
+    addCategory({ title, custom_friendship_id: customFriendshipId });
     resetTitle();
   };
 

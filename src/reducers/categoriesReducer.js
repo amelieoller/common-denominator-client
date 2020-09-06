@@ -1,5 +1,10 @@
 const categoriesReducer = (categories, action) => {
   switch (action.type) {
+    case "CLEAR_STORAGE": {
+      // debugger;
+      return null;
+    }
+
     // Categories
     case "SET_CATEGORIES": {
       return action.categories;

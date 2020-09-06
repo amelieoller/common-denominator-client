@@ -2,9 +2,11 @@ import React from "react";
 
 import { AuthContext } from "../context/AuthContext";
 import { fetchSignup, fetchLogin, fetchGetCurrentUser } from "../api/auth";
+import useCategories from "./useCategories";
 
 const useAuth = () => {
   const context = React.useContext(AuthContext);
+  const { getCategories, clearStorage } = useCategories();
 
   if (!context) {
     throw new Error(`useAuth must be used within a AuthProvider`);
@@ -53,6 +55,8 @@ const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem("token");
+
+    clearStorage();
 
     dispatch({
       type: "REMOVE_USER",

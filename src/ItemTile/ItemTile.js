@@ -49,7 +49,7 @@ const ItemTile = ({ item }) => {
         onChange={handleOnRatingChange}
         onBlur={handleOnRatingBlur}
         type="number"
-        max={10}
+        max={5}
         min={0}
       />
 
