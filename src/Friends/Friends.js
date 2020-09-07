@@ -3,14 +3,17 @@ import PropTypes from "prop-types";
 import styled from "styled-components/macro";
 
 import useAuth from "../hooks/useAuth";
-import { Link } from "react-router-dom";
-import FriendTile from "./FriendTile";
+import { withRouter } from "react-router-dom";
 import NewFriend from "./NewFriend";
 import Tiles from "../Tiles/Tiles";
 import Tile from "../Tile/Tile";
 
-const Friends = () => {
+const Friends = ({ history }) => {
   const { user } = useAuth();
+
+  const routeTo = (url) => {
+    history.push(url);
+  };
 
   return (
     <>
@@ -18,14 +21,18 @@ const Friends = () => {
 
       <Tiles>
         {user.friends.map((friend) => (
-          <FriendTile key={friend.id} friend={friend} />
+          <Tile
+            isLinkable
+            onClick={() => routeTo(`friends/${friend.slug}`)}
+            key={friend.id}
+          >
+            <h2>{friend.username}</h2>
+          </Tile>
         ))}
 
-        <Link to={`categories`}>
-          <Tile>
-            <h2>Go Solo</h2>
-          </Tile>
-        </Link>
+        <Tile isLinkable onClick={() => routeTo("categories")}>
+          <h2>Go Solo</h2>
+        </Tile>
 
         <NewFriend />
       </Tiles>
@@ -35,4 +42,4 @@ const Friends = () => {
 
 Friends.propTypes = {};
 
-export default Friends;
+export default withRouter(Friends);

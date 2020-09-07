@@ -5,12 +5,15 @@ import * as serviceWorker from "./serviceWorker";
 
 import { AuthProvider } from "./context/AuthContext";
 import { CategoriesProvider } from "./context/CategoriesContext";
+import { FriendshipsProvider } from "./context/FriendshipsContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
       <CategoriesProvider>
-        <App />
+        <FriendshipsProvider>
+          <App />
+        </FriendshipsProvider>
       </CategoriesProvider>
     </AuthProvider>
   </React.StrictMode>,

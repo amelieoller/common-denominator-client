@@ -38,11 +38,12 @@ const useCategories = () => {
   };
 
   const addCategory = (category) => {
-    fetchPostCategory(category).then((data) => {
+    return fetchPostCategory(category).then((data) => {
       if (data.errors) {
         console.log(data.errors);
       } else {
         dispatch({ type: "ADD_CATEGORY", category: data });
+        return data;
       }
     });
   };

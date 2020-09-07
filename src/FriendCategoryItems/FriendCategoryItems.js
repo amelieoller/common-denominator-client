@@ -9,35 +9,44 @@ import ItemTile from "../ItemTile/ItemTile";
 import NewItem from "../NewItem/NewItem";
 import Tiles from "../Tiles/Tiles";
 import Tile from "../Tile/Tile";
+import useFriendships from "../hooks/useFriendships";
+import useCategories from "../hooks/useCategories";
 
-const FriendCategoryItems = ({ match }) => {
-  const [customFriendshipId, setCustomFriendshipId] = useState(null);
-  const [categories, setCategories] = useState(null);
+const FriendCategoryItems = ({ match, history }) => {
+  const [friendship, setFriendship] = useState(null);
   const [category, setCategory] = useState(null);
   const [items, setItems] = useState(null);
   const [result, setResult] = useState(null);
   const [friend, setFriend] = useState(null);
 
   const { user } = useAuth();
+  const { getFriendship, friendships } = useFriendships();
+  const { categories } = useCategories();
 
   useEffect(() => {
     if (!user) return;
 
     const friendSlug = match.params.friend_slug.toLowerCase();
-    const foundFriend = user.friends.find((c) => c.slug === friendSlug);
+    const friend = user.friends.find((c) => c.slug === friendSlug);
 
-    fetchGetFriendship(user.token, foundFriend.id).then((fs) => {
-      setCustomFriendshipId(fs.customFriendshipId);
-      setCategories(fs.categories);
-    });
+    if (friend) setFriend(friend);
 
-    setFriend(foundFriend);
-  }, [
-    user,
-    match.params.slug,
-    match.params.friend_slug,
-    match.params.category_slug,
-  ]);
+    if (friendships.length) {
+      const minNum = Math.min(user.id, friend.id);
+      const maxNum = Math.max(user.id, friend.id);
+      const friendshipId = `${minNum}_${maxNum}`;
+
+      const friendship = friendships.find(
+        (fs) => fs.customFriendshipId === friendshipId
+      );
+
+      setFriendship(friendship);
+    } else {
+      getFriendship(friend.id);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, match.params.slug, friendships]);
 
   const handleGetResults = (categoryId) => {
     fetchGetResults(categoryId).then(({ result }) => setResult(result));
@@ -48,12 +57,14 @@ const FriendCategoryItems = ({ match }) => {
       const categorySlug = match.params.category_slug.toLowerCase();
       const category = categories.find((c) => c.slug === categorySlug);
 
-      fetchGetCategory(category.id).then((category) => {
+      if (category) {
         setCategory(category);
         setItems(category.items);
-      });
+      } else {
+        history.push(match.url.replace(`/${match.params.category_slug}`, ""));
+      }
     }
-  }, [categories, customFriendshipId, match.params.category_slug]);
+  }, [categories, history, match.params, match.url]);
 
   return category && items ? (
     <StyledFriendCategoryItems>

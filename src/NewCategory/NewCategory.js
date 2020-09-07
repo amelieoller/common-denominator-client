@@ -3,9 +3,11 @@ import React from "react";
 import useFormInput from "../hooks/useFormInput";
 import useCategories from "../hooks/useCategories";
 import Tile from "../Tile/Tile";
+import useFriendships from "../hooks/useFriendships";
 
 const NewCategory = ({ customFriendshipId }) => {
   const { addCategory } = useCategories();
+  const { addCategoryToFriendship } = useFriendships();
 
   const [title, bindTitle, resetTitle] = useFormInput("");
 
@@ -14,7 +16,12 @@ const NewCategory = ({ customFriendshipId }) => {
 
     if (!title) return;
 
-    addCategory({ title, custom_friendship_id: customFriendshipId });
+    addCategory({ title, custom_friendship_id: customFriendshipId }).then(
+      (category) => {
+        if (customFriendshipId)
+          addCategoryToFriendship(customFriendshipId, category);
+      }
+    );
     resetTitle();
   };
 

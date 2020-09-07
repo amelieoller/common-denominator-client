@@ -1,27 +1,33 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import useCategories from "../hooks/useCategories";
 import Tile from "../Tile/Tile";
 
-const CategoryTile = ({ category }) => {
+const CategoryTile = ({ category, history }) => {
   const { deleteCategory } = useCategories();
 
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.stopPropagation();
     deleteCategory(category.id);
   };
 
-  return (
-    <Link to={`categories/${category.slug}`}>
-      <Tile>
-        <h2>{category.title}</h2>
+  const routeTo = (category) => {
+    history.push(`categories/${category.slug}`);
+  };
 
-        <button className="pure-button button-error" onClick={handleDelete}>
-          <i className="fas fa-trash"></i>
-        </button>
-      </Tile>
-    </Link>
+  return (
+    <Tile isLinkable onClick={() => routeTo(category)}>
+      <h2>{category.title}</h2>
+
+      <button
+        className="pure-button button-error"
+        onClick={(e) => handleDelete(e)}
+      >
+        <i className="fas fa-trash"></i>
+      </button>
+    </Tile>
   );
 };
 
@@ -42,4 +48,4 @@ CategoryTile.propTypes = {
   }),
 };
 
-export default CategoryTile;
+export default withRouter(CategoryTile);

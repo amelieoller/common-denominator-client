@@ -16,6 +16,7 @@ import Login from "./Login/Login";
 import GetStarted from "./GetStarted/GetStarted";
 import useCategories from "./hooks/useCategories";
 import FriendsPage from "./FriendsPage/FriendsPage";
+import SettingsPage from "./SettingsPage/SettingsPage";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -58,6 +59,7 @@ const App = () => {
                   <Switch>
                     <Route path="/categories" component={CategoriesPage} />
                     <Route path="/friends" component={FriendsPage} />
+                    <Route path="/settings" component={SettingsPage} />
                     <Redirect
                       to={{
                         pathname: "/friends",

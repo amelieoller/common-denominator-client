@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+
 import useAuth from "../hooks/useAuth";
 
-const Navbar = () => {
+const Navbar = ({ location }) => {
   const { user, logout } = useAuth();
+
+  const path = location.pathname.split("/")[1];
 
   return (
     <div className="header">
@@ -16,15 +19,39 @@ const Navbar = () => {
         <ul className="pure-menu-list">
           {user && (
             <>
-              {/* <li className="pure-menu-item">
-                <Link to="/categories" className="pure-menu-link">
-                  Categories
-                </Link>
-              </li> */}
-
-              <li className="pure-menu-item pure-menu-selected">
+              <li
+                className={
+                  path === "friends"
+                    ? "pure-menu-item pure-menu-selected"
+                    : "pure-menu-item"
+                }
+              >
                 <Link to="/friends" className="pure-menu-link">
                   Friends
+                </Link>
+              </li>
+
+              <li
+                className={
+                  path === "categories"
+                    ? "pure-menu-item pure-menu-selected"
+                    : "pure-menu-item"
+                }
+              >
+                <Link to="/categories" className="pure-menu-link">
+                  Go Solo
+                </Link>
+              </li>
+
+              <li
+                className={
+                  path === "settings"
+                    ? "pure-menu-item pure-menu-selected"
+                    : "pure-menu-item"
+                }
+              >
+                <Link to="/settings" className="pure-menu-link">
+                  <i className="fas fa-cog"></i>
                 </Link>
               </li>
             </>
@@ -33,7 +60,7 @@ const Navbar = () => {
           <li className="pure-menu-item">
             {user ? (
               <Link to="/" className="pure-menu-link" onClick={logout}>
-                Logout
+                <i className="fas fa-sign-out-alt"></i>
               </Link>
             ) : (
               <Link to="/" className="pure-menu-link">
@@ -49,4 +76,4 @@ const Navbar = () => {
 
 const StyledNavbar = styled.div``;
 
-export default Navbar;
+export default withRouter(Navbar);
