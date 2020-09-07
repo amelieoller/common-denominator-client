@@ -3,33 +3,44 @@ import styled from "styled-components/macro";
 import { Switch, Route } from "react-router-dom";
 
 import useFormInput from "../hooks/useFormInput";
-import { fetchPatchFriendship } from "../api/friendship";
+import useFriendships from "../hooks/useFriendships";
+import Tile from "../Tile/Tile";
 
-const SettingsPage = () => {
-  const [harmony, bindHarmony, resetHarmony] = useFormInput("");
-  const [randomness, bindRandomness, resetRandomness] = useFormInput("");
+const SettingsPage = ({
+  friendshipId,
+  friendshipHarmony,
+  friendshipRandomness,
+}) => {
+  const [harmony, bindHarmony] = useFormInput(friendshipHarmony);
+  const [randomness, bindRandomness] = useFormInput(friendshipRandomness);
 
-  const handleSubmit = () => {
-    fetchPatchFriendship();
-    resetHarmony();
-    resetRandomness();
+  const { updateFriendship } = useFriendships();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    updateFriendship(friendshipId, { harmony, randomness });
   };
 
   return (
-    <StyledSettingsPage>
-      <h1 className="content-head content-head-ribbon">Settings</h1>
-
+    <Tile>
       <form onSubmit={handleSubmit} className="pure-form">
         <fieldset>
           <input
             {...bindHarmony}
-            type="text"
+            type="number"
             placeholder="Harmony Coefficient"
+            min="0"
+            max="2"
+            step="any"
           />
           <input
             {...bindRandomness}
-            type="text"
+            type="number"
             placeholder="Randomness Factor"
+            min="0"
+            max="5"
+            step="any"
           />
 
           <button type="submit" className="pure-button">
@@ -37,12 +48,8 @@ const SettingsPage = () => {
           </button>
         </fieldset>
       </form>
-    </StyledSettingsPage>
+    </Tile>
   );
 };
-const StyledSettingsPage = styled.div`
-  width: 80%;
-  margin: 0 auto;
-`;
 
 export default SettingsPage;

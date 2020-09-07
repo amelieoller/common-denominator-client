@@ -13,7 +13,6 @@ import CategoriesPage from "./CategoriesPage/CategoriesPage";
 import Navbar from "./Navbar/Navbar";
 import useAuth from "./hooks/useAuth";
 import Login from "./Login/Login";
-import GetStarted from "./GetStarted/GetStarted";
 import useCategories from "./hooks/useCategories";
 import FriendsPage from "./FriendsPage/FriendsPage";
 import SettingsPage from "./SettingsPage/SettingsPage";

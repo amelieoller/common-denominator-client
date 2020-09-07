@@ -53,9 +53,11 @@ const FriendCategoryItems = ({ match, history }) => {
   };
 
   useEffect(() => {
-    if (categories) {
+    if (friendship) {
       const categorySlug = match.params.category_slug.toLowerCase();
-      const category = categories.find((c) => c.slug === categorySlug);
+      const category = friendship.categories.find(
+        (c) => c.slug === categorySlug
+      );
 
       if (category) {
         setCategory(category);
@@ -64,7 +66,8 @@ const FriendCategoryItems = ({ match, history }) => {
         history.push(match.url.replace(`/${match.params.category_slug}`, ""));
       }
     }
-  }, [categories, history, match.params, match.url]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [friendship]);
 
   return category && items ? (
     <StyledFriendCategoryItems>

@@ -11,15 +11,6 @@ const fetchGetFriendship = (friendId) => {
     .catch((error) => console.log(error));
 };
 
-// const fetchGetFriendship = (friendshipId) => {
-//   const options = { headers: { ...headers() } };
-
-//   return fetch(`${baseUrl}/${friendshipId}`, options)
-//     .then((resp) => resp.json())
-//     .then((data) => data)
-//     .catch((error) => console.log(error));
-// };
-
 const fetchGetResults = (categoryId) => {
   const options = { headers: { ...headers() } };
 
@@ -30,7 +21,11 @@ const fetchGetResults = (categoryId) => {
 };
 
 const fetchPatchFriendship = (friendshipId, settings) => {
-  const options = { headers: { ...headers() } };
+  const options = {
+    method: "PATCH",
+    headers: headers(),
+    body: JSON.stringify(settings),
+  };
 
   return fetch(`${baseUrl}/${friendshipId}`, options)
     .then((resp) => resp.json())

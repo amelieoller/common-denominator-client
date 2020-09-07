@@ -8,7 +8,7 @@ const Tile = ({ children, ...props }) => {
 
 const StyledItemTile = styled.div`
   background: white;
-  height: 150px;
+  height: 200px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;

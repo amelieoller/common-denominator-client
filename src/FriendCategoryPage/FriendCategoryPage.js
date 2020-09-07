@@ -8,6 +8,7 @@ import Tiles from "../Tiles/Tiles";
 import NewCategory from "../NewCategory/NewCategory";
 import useCategories from "../hooks/useCategories";
 import useFriendships from "../hooks/useFriendships";
+import SettingsPage from "../SettingsPage/SettingsPage";
 
 const FriendCategoryPage = ({ history, friend, user, friendship }) => {
   const { deleteCategory } = useCategories();
@@ -50,6 +51,12 @@ const FriendCategoryPage = ({ history, friend, user, friendship }) => {
             </Tile>
           ))}
           <NewCategory customFriendshipId={friendship.customFriendshipId} />
+
+          <SettingsPage
+            friendshipId={friendship.id}
+            friendshipHarmony={friendship.harmony}
+            friendshipRandomness={friendship.randomness}
+          />
         </Tiles>
       )}
     </StyledFriendPage>

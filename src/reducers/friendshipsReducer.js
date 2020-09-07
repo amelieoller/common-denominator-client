@@ -33,6 +33,17 @@ const friendshipsReducer = (friendships, action) => {
           : f
       );
     }
+    case "UPDATE_FRIENDSHIP_SETTINGS": {
+      return friendships.map((f) =>
+        f.id === action.friendshipId
+          ? {
+              ...f,
+              harmony: action.harmony,
+              randomness: action.randomness,
+            }
+          : f
+      );
+    }
 
     default: {
       throw new Error(`Unsupported action type: ${action.type}`);

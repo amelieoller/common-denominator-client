@@ -5,11 +5,11 @@ import {
   fetchPostFriendship,
   fetchDeleteFriendship,
   fetchGetFriendship,
+  fetchPatchFriendship,
 } from "../api/friendship";
 
 const useFriendships = () => {
   const context = React.useContext(FriendshipsContext);
-
   if (!context) {
     throw new Error(`useFriendships must be used within a FriendshipsProvider`);
   }
@@ -75,6 +75,21 @@ const useFriendships = () => {
       categoryId,
     });
 
+  const updateFriendship = (friendshipId, settings) => {
+    fetchPatchFriendship(friendshipId, settings).then((data) => {
+      if (data.errors) {
+        console.log(data.errors);
+      } else {
+        dispatch({
+          type: "UPDATE_FRIENDSHIP_SETTINGS",
+          friendshipId,
+          harmony: data.harmony,
+          randomness: data.randomness,
+        });
+      }
+    });
+  };
+
   return {
     friendships,
     dispatch,
@@ -85,6 +100,7 @@ const useFriendships = () => {
     getFriendships,
     clearStorage,
     getFriendship,
+    updateFriendship,
   };
 };
 
