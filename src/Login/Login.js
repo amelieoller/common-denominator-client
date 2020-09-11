@@ -4,19 +4,35 @@ import styled from "styled-components/macro";
 
 import useFormInput from "../hooks/useFormInput";
 import useAuth from "../hooks/useAuth";
+import useFirebase from "../hooks/useFirebase";
+import PasswordForget from "../PasswordForget/PasswordForget";
 
 const Login = () => {
   const { login, signup } = useAuth();
-
   const [isLogin, setIsLogin] = useState(true);
+  const {
+    doCreateUserWithEmailAndPassword,
+    doSignInWithEmailAndPassword,
+  } = useFirebase();
 
   const [username, bindUsername, resetUsername] = useFormInput("");
   const [password, bindPassword, resetPassword] = useFormInput("");
 
+  const isInvalid = !password || !username;
+
   const handleLogin = (e) => {
     e.preventDefault();
 
-    login({ username, password });
+    doSignInWithEmailAndPassword(username, password)
+      .then((authUser) => {
+        console.log(authUser);
+        // debugger;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // login({ username, password });
 
     resetUsername();
     resetPassword();
@@ -25,7 +41,19 @@ const Login = () => {
   const handleSignup = (e) => {
     e.preventDefault();
 
-    signup({ user: { username, password } });
+    doCreateUserWithEmailAndPassword(username, password);
+    // .then((authUser) => {
+    //   console.log(authUser);
+
+    //   firebase.user(authUser.user.uid).set({
+    //     email: username,
+    //   });
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    // });
+
+    // signup({ user: { username, password } });
 
     resetUsername();
     resetPassword();
@@ -81,11 +109,12 @@ const Login = () => {
             )}
           </SignupOrLoginMessage>
 
-          <button type="submit" className="pure-button">
+          <button type="submit" className="pure-button" disabled={isInvalid}>
             {isLogin ? "Login" : "Signup"}
           </button>
         </fieldset>
       </form>
+      <PasswordForget />
     </div>
   );
 };

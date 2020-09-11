@@ -3,19 +3,13 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-import { AuthProvider } from "./context/AuthContext";
-import { CategoriesProvider } from "./context/CategoriesContext";
-import { FriendshipsProvider } from "./context/FriendshipsContext";
+import Firebase, { FirebaseContext } from "./components/Firebase";
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
-      <CategoriesProvider>
-        <FriendshipsProvider>
-          <App />
-        </FriendshipsProvider>
-      </CategoriesProvider>
-    </AuthProvider>
+    <FirebaseContext.Provider value={new Firebase()}>
+      <App />
+    </FirebaseContext.Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -1,89 +1,33 @@
-import React, { useEffect, useState } from "react";
-import styled, { ThemeProvider } from "styled-components/macro";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import { theme } from "./theme";
-import GlobalStyle from "./GlobalStyle";
-import CategoriesPage from "./CategoriesPage/CategoriesPage";
+import LandingPage from "./components/Landing";
+import HomePage from "./components/Home";
+import * as ROUTES from "./constants/routes";
+import { withAuthentication } from "./Session";
 import Navbar from "./Navbar/Navbar";
-import useAuth from "./hooks/useAuth";
-import Login from "./Login/Login";
-import useCategories from "./hooks/useCategories";
-import FriendsPage from "./FriendsPage/FriendsPage";
-import SettingsPage from "./SettingsPage/SettingsPage";
+import SignInPage from "./SignInAndSignUp/SignIn/SignIn";
+import SignUpPage from "./SignInAndSignUp/SignUp/SignUp";
+import Account from "./Account/Account";
+import PasswordForgetPage from "./Password/PasswordForget/PasswordForget";
+import GroupsPage from "./Groups/GroupsPage";
 
-const App = () => {
-  const [loading, setLoading] = useState(true);
-  const { getCurrentUser, user } = useAuth();
-  const { getCategories } = useCategories();
+const App = () => (
+  <Router>
+    <div>
+      <Navbar />
 
-  useEffect(() => {
-    getCurrentUser().then(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      <Switch>
+        <Route exact path={ROUTES.HOME} component={LandingPage} />
+        <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+        <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+        <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+        <Route path={ROUTES.GROUPS} component={GroupsPage} />
+        <Route path={ROUTES.ITEMS} component={HomePage} />
+        <Route path={ROUTES.ACCOUNT} component={Account} />
+      </Switch>
+    </div>
+  </Router>
+);
 
-  useEffect(() => {
-    if (user) {
-      getCategories(user.token);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  return (
-    <Router>
-      <ThemeProvider theme={theme}>
-        <StyledApp>
-          <GlobalStyle />
-
-          {!loading ? (
-            <>
-              <Navbar />
-
-              <div className="splash-container">
-                {!user ? (
-                  <Switch>
-                    <Route exact path="/" component={Login} />
-                    <Redirect
-                      to={{
-                        pathname: "/",
-                      }}
-                    />
-                  </Switch>
-                ) : (
-                  <Switch>
-                    <Route path="/categories" component={CategoriesPage} />
-                    <Route path="/friends" component={FriendsPage} />
-                    <Route path="/settings" component={SettingsPage} />
-                    <Redirect
-                      to={{
-                        pathname: "/friends",
-                      }}
-                    />
-                  </Switch>
-                )}
-              </div>
-            </>
-          ) : (
-            "loading"
-          )}
-        </StyledApp>
-      </ThemeProvider>
-    </Router>
-  );
-};
-
-const StyledApp = styled.div`
-  max-width: 900px;
-  margin: 0 auto;
-`;
-
-const StyledMain = styled.div`
-  padding: ${({ theme }) => theme.padding};
-`;
-
-export default App;
+export default withAuthentication(App);

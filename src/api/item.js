@@ -41,7 +41,7 @@ const fetchPatchItemRating = (rating) => {
   const options = {
     method: "PATCH",
     headers: headers(),
-    body: JSON.stringify(rating),
+    body: JSON.stringify({ value: rating.value }),
   };
 
   return fetch(`${API_ROOT}/ratings/${rating.id}`, options)

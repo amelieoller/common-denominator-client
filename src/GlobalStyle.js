@@ -116,6 +116,8 @@ export default styled.createGlobalStyle`
     color: white;
     padding: 0.5em 2em;
     border-radius: 5px; */
+
+    padding: 0.35em 0.75em;
   }
 
   a.pure-button-primary {

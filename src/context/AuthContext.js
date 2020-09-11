@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import authReducer from "../reducers/authReducer";
-import { API_ROOT, headers } from "../api";
 
-const url = `${API_ROOT}/auth`;
 const AuthContext = React.createContext();
 
 const AuthProvider = (props) => {

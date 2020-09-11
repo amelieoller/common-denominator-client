@@ -3,12 +3,18 @@ import PropTypes from "prop-types";
 import styled from "styled-components/macro";
 
 import CategoryTile from "../CategoryTile/CategoryTile";
-import NewCategory from "../NewCategory/NewCategory";
 import useCategories from "../hooks/useCategories";
 import Tiles from "../Tiles/Tiles";
+import NewTile from "../NewTile/NewTile";
+import useAuth from "../hooks/useAuth";
 
 const Categories = () => {
-  const { categories } = useCategories();
+  const { categories, addCategory } = useCategories();
+  const { user } = useAuth();
+
+  const handleAddNewItem = (title) => {
+    addCategory({ title, user_id: user.id });
+  };
 
   return categories ? (
     <StyledCategories>
@@ -19,7 +25,11 @@ const Categories = () => {
           <CategoryTile category={category} key={category.id} />
         ))}
 
-        <NewCategory />
+        <NewTile
+          handleAddNewItem={handleAddNewItem}
+          placeholderText="Add New Item"
+          buttonText="Add"
+        />
       </Tiles>
     </StyledCategories>
   ) : (

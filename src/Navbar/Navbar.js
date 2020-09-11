@@ -1,79 +1,76 @@
 import React from "react";
-import styled from "styled-components/macro";
 import { Link, withRouter } from "react-router-dom";
+import { compose } from "recompose";
 
-import useAuth from "../hooks/useAuth";
+import { AuthUserContext } from "../Session";
+import * as ROUTES from "../constants/routes";
+import { withFirebase } from "../components/Firebase";
 
-const Navbar = ({ location }) => {
-  const { user, logout } = useAuth();
+const Navbar = ({ location, firebase }) => {
+  const currentPath = location.pathname;
+  const menuItem = "pure-menu-item";
+  const selectedItem = "pure-menu-item pure-menu-selected";
 
-  const path = location.pathname.split("/")[1];
+  const renderMenuItem = (path) => {
+    const routePath = path.split(" ").join("_").toUpperCase();
+
+    return (
+      <li
+        className={currentPath === ROUTES[routePath] ? selectedItem : menuItem}
+      >
+        <Link to={ROUTES[routePath]} className="pure-menu-link">
+          {path}
+        </Link>
+      </li>
+    );
+  };
+
+  const renderMenuHeading = (text) => (
+    <Link to="/" className="pure-menu-heading">
+      {text}
+    </Link>
+  );
+
+  const renderMenuButton = (buttonText, onClick) => (
+    <li className={menuItem}>
+      <button type="button" onClick={onClick}>
+        {buttonText}
+      </button>
+    </li>
+  );
 
   return (
     <div className="header">
-      <div className="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <Link to="/" className="pure-menu-heading">
-          {user ? `Hi ${user.username}!` : "Common Denominator"}
-        </Link>
+      <div className="home-menu pure-menu pure-menu-horizontal">
+        <AuthUserContext.Consumer>
+          {(authUser) =>
+            authUser ? (
+              <>
+                {renderMenuHeading(`Hi ${authUser.username}!`)}
 
-        <ul className="pure-menu-list">
-          {user && (
-            <>
-              <li
-                className={
-                  path === "friends"
-                    ? "pure-menu-item pure-menu-selected"
-                    : "pure-menu-item"
-                }
-              >
-                <Link to="/friends" className="pure-menu-link">
-                  Friends
-                </Link>
-              </li>
+                <ul className="pure-menu-list">
+                  {renderMenuItem("Home")}
+                  {renderMenuItem("Groups")}
+                  {renderMenuItem("Account")}
 
-              <li
-                className={
-                  path === "categories"
-                    ? "pure-menu-item pure-menu-selected"
-                    : "pure-menu-item"
-                }
-              >
-                <Link to="/categories" className="pure-menu-link">
-                  Go Solo
-                </Link>
-              </li>
-
-              <li
-                className={
-                  path === "settings"
-                    ? "pure-menu-item pure-menu-selected"
-                    : "pure-menu-item"
-                }
-              >
-                <Link to="/settings" className="pure-menu-link">
-                  <i className="fas fa-cog"></i>
-                </Link>
-              </li>
-            </>
-          )}
-
-          <li className="pure-menu-item">
-            {user ? (
-              <Link to="/" className="pure-menu-link" onClick={logout}>
-                <i className="fas fa-sign-out-alt"></i>
-              </Link>
+                  {renderMenuButton("Sign Out", firebase.doSignOut)}
+                </ul>
+              </>
             ) : (
-              <Link to="/" className="pure-menu-link">
-                Login
-              </Link>
-            )}
-          </li>
-        </ul>
+              <>
+                {renderMenuHeading("Common Denominator")}
+
+                <ul className="pure-menu-list">
+                  {renderMenuItem("Home")}
+                  {renderMenuItem("Sign In")}
+                </ul>
+              </>
+            )
+          }
+        </AuthUserContext.Consumer>
       </div>
     </div>
   );
 };
 
-const StyledNavbar = styled.div``;
-
-export default withRouter(Navbar);
+export default compose(withRouter, withFirebase)(Navbar);

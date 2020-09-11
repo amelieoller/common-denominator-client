@@ -4,15 +4,19 @@ import styled from "styled-components/macro";
 
 import useAuth from "../hooks/useAuth";
 import { withRouter } from "react-router-dom";
-import NewFriend from "./NewFriend";
 import Tiles from "../Tiles/Tiles";
 import Tile from "../Tile/Tile";
+import NewTile from "../NewTile/NewTile";
 
 const Friends = ({ history }) => {
-  const { user } = useAuth();
+  const { user, addFriend } = useAuth();
 
   const routeTo = (url) => {
     history.push(url);
+  };
+
+  const handleAddNewItem = (friendName) => {
+    addFriend(user.id, friendName);
   };
 
   return (
@@ -20,7 +24,7 @@ const Friends = ({ history }) => {
       <h1 className="content-head content-head-ribbon">Friends</h1>
 
       <Tiles>
-        {user.friends.map((friend) => (
+        {/* {user.friends.map((friend) => (
           <Tile
             isLinkable
             onClick={() => routeTo(`friends/${friend.slug}`)}
@@ -34,7 +38,11 @@ const Friends = ({ history }) => {
           <h2>Go Solo</h2>
         </Tile>
 
-        <NewFriend />
+        <NewTile
+          handleAddNewItem={handleAddNewItem}
+          placeholderText="Add New Friend"
+          buttonText="Add"
+        /> */}
       </Tiles>
     </>
   );

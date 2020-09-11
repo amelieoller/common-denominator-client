@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/macro";
 
 import useCategories from "../hooks/useCategories";
 import Tile from "../Tile/Tile";
 
-const ItemTile = ({ item }) => {
-  const { deleteItem, updateItem, updateItemRating } = useCategories();
-
+const ItemTile = ({ item, deleteItem, updateItem, updateItemRating }) => {
   const [title, setTitle] = useState(item.title);
   const [rating, setRating] = useState(item.currentUserRating.value);
   const [saved, setSaved] = useState(true);
+
+  useEffect(() => {
+    let interval;
+
+    if (!saved) {
+      interval = setInterval(() => {
+        handleOnRatingBlur();
+      }, 2500);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rating, saved]);
 
   const handleDelete = () => {
     deleteItem(item);
@@ -18,12 +33,24 @@ const ItemTile = ({ item }) => {
 
   const handleOnTitleChange = (e) => {
     setTitle(e.target.value);
-    setSaved(false);
+    if (saved) setSaved(false);
   };
 
   const handleOnRatingChange = (e) => {
     setRating(e.target.value);
-    setSaved(false);
+    if (saved) setSaved(false);
+  };
+
+  const increment = () => {
+    if (rating >= 5) return;
+    setRating((prevRating) => prevRating + 1);
+    if (saved) setSaved(false);
+  };
+
+  const decrement = () => {
+    if (rating <= 0) return;
+    setRating((prevRating) => prevRating - 1);
+    if (saved) setSaved(false);
   };
 
   const handleSubmit = (e) => {
@@ -34,14 +61,14 @@ const ItemTile = ({ item }) => {
   };
 
   const handleOnTitleBlur = () => {
-    if (item.title === title) return;
+    if (saved) return;
 
     setSaved(true);
     updateItem({ ...item, title });
   };
 
   const handleOnRatingBlur = () => {
-    if (item.currentUserRating.value === rating) return;
+    if (saved) return;
 
     setSaved(true);
     updateItemRating(item, { ...item.currentUserRating, value: +rating });
@@ -49,59 +76,122 @@ const ItemTile = ({ item }) => {
 
   return (
     <Tile>
-      <ItemForm onSubmit={handleSubmit} className="pure-form">
-        <fieldset>
-          <div className="input-wrapper">
-            <input
-              value={title}
-              onChange={handleOnTitleChange}
-              onBlur={handleOnTitleBlur}
-              type="text"
-              placeholder="Item Title"
-              className="title"
-            />
-            <input
-              value={rating}
-              onChange={handleOnRatingChange}
-              onBlur={handleOnRatingBlur}
-              type="number"
-              max={5}
-              min={0}
-              placeholder="Rating"
-              className="rating"
-            />
-          </div>
+      <FormWrapper>
+        <TitleForm onSubmit={handleSubmit} className="pure-form">
+          <textarea
+            className="pure-input"
+            placeholder="Item Title"
+            onChange={handleOnTitleChange}
+            onBlur={handleOnTitleBlur}
+            defaultValue={title}
+          ></textarea>
 
-          {saved ? (
-            <button className="pure-button pure-button-disabled">Saved</button>
-          ) : (
-            <button type="submit" className="pure-button pure-button-primary">
-              Save
+          <FormButtons>
+            <button
+              type="submit"
+              className={
+                saved
+                  ? "pure-button pure-button-disabled"
+                  : "pure-button button-success"
+              }
+            >
+              <i className="fas fa-save"></i>
             </button>
-          )}
-        </fieldset>
-      </ItemForm>
 
-      <button className="pure-button button-error" onClick={handleDelete}>
-        <i className="fas fa-trash"></i>
-      </button>
+            <button className="pure-button button-error" onClick={handleDelete}>
+              <i className="fas fa-trash"></i>
+            </button>
+          </FormButtons>
+        </TitleForm>
+
+        <RatingWrapper>
+          <i className="fas fa-arrow-up" onClick={increment}></i>
+
+          <input
+            value={rating}
+            onChange={handleOnRatingChange}
+            onBlur={handleOnRatingBlur}
+            type="number"
+            max={5}
+            min={0}
+            placeholder="Rating"
+            className="rating"
+          />
+
+          <i className="fas fa-arrow-down" onClick={decrement}></i>
+        </RatingWrapper>
+      </FormWrapper>
     </Tile>
   );
 };
 
-const ItemForm = styled.form`
-  fieldset {
-    .input-wrapper {
-      display: flex;
+const FormWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+`;
 
-      .title {
-      }
+const TitleForm = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
-      input.rating {
-        width: 50px;
-        margin-left: 10px;
-      }
+  textarea {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 15px;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+`;
+
+const FormButtons = styled.div`
+  button[type="submit"] {
+    margin: 0;
+  }
+
+  & > button[type="submit"]:first-child {
+    margin-right: 10px;
+  }
+`;
+
+const RatingWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: #777;
+  font-size: 18px;
+  margin-left: 15px;
+
+  i {
+    cursor: pointer;
+
+    &:hover {
+      color: #a9a9a9;
     }
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  input {
+    border: none;
+    background: transparent;
+    font-size: 28px;
+    text-align: center;
   }
 `;
 

@@ -3,14 +3,13 @@ import PropTypes from "prop-types";
 import styled from "styled-components/macro";
 
 import useAuth from "../hooks/useAuth";
-import { fetchGetCategory } from "../api/category";
-import { fetchGetFriendship, fetchGetResults } from "../api/friendship";
+import { fetchGetResults } from "../api/friendship";
 import ItemTile from "../ItemTile/ItemTile";
-import NewItem from "../NewItem/NewItem";
 import Tiles from "../Tiles/Tiles";
 import Tile from "../Tile/Tile";
 import useFriendships from "../hooks/useFriendships";
 import useCategories from "../hooks/useCategories";
+import NewTile from "../NewTile/NewTile";
 
 const FriendCategoryItems = ({ match, history }) => {
   const [friendship, setFriendship] = useState(null);
@@ -18,9 +17,17 @@ const FriendCategoryItems = ({ match, history }) => {
   const [items, setItems] = useState(null);
   const [result, setResult] = useState(null);
   const [friend, setFriend] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { user } = useAuth();
-  const { getFriendship, friendships } = useFriendships();
+  const {
+    getFriendship,
+    friendships,
+    removeCategoryItemFromFriendship,
+    updateCategoryItem,
+    updateCategoryItemRating,
+    addCategoryItemToFriendship,
+  } = useFriendships();
   const { categories } = useCategories();
 
   useEffect(() => {
@@ -48,7 +55,24 @@ const FriendCategoryItems = ({ match, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, match.params.slug, friendships]);
 
+  const checkIfIsValid = () => {
+    const numberOfVetoes = items.filter((i) => i.currentUserRating.value === 0)
+      .length;
+    const numItems = items.length;
+    const vetoPercentage = friendship.vetoes / 100;
+    const numberVetoesAvailable = Math.ceil(numItems * vetoPercentage);
+
+    if (numberOfVetoes <= numberVetoesAvailable) {
+      return true;
+    } else {
+      setErrorMessage("You have more vetoes than allowed.");
+      return false;
+    }
+  };
+
   const handleGetResults = (categoryId) => {
+    if (!checkIfIsValid()) return;
+
     fetchGetResults(categoryId).then(({ result }) => setResult(result));
   };
 
@@ -69,6 +93,26 @@ const FriendCategoryItems = ({ match, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [friendship]);
 
+  const deleteItem = (item) => {
+    removeCategoryItemFromFriendship(friendship.id, item.id, category.id);
+  };
+
+  const addItem = (text) => {
+    addCategoryItemToFriendship(
+      friendship.id,
+      { title: text, category_id: category.id },
+      category.id
+    );
+  };
+
+  const updateItemRating = (item, rating) => {
+    updateCategoryItemRating(friendship.id, category.id, item.id, rating);
+  };
+
+  const updateItem = (newItem) => {
+    updateCategoryItem(friendship.id, category.id, newItem);
+  };
+
   return category && items ? (
     <StyledFriendCategoryItems>
       <h1 className="content-head content-head-ribbon">
@@ -76,6 +120,8 @@ const FriendCategoryItems = ({ match, history }) => {
       </h1>
 
       <h2 className="content-head content-head-ribbon">{category.title}</h2>
+
+      {errorMessage}
 
       {result ? (
         <>
@@ -94,12 +140,22 @@ const FriendCategoryItems = ({ match, history }) => {
         <>
           <Tiles>
             {items.map((item) => (
-              <ItemTile key={item.id} item={item}>
+              <ItemTile
+                key={item.id}
+                item={item}
+                deleteItem={deleteItem}
+                updateItem={updateItem}
+                updateItemRating={updateItemRating}
+              >
                 {item.title}
               </ItemTile>
             ))}
 
-            <NewItem category={category} />
+            <NewTile
+              handleAddNewItem={addItem}
+              placeholderText="Add New Item"
+              buttonText="Add"
+            />
           </Tiles>
 
           <button
