@@ -127,33 +127,60 @@ export default styled.createGlobalStyle`
     font-size: 120%; */
   }
 
+  .pure-button-disabled {
+    border: 1px solid;
+  }
+
   .button-success,
   .button-error,
   .button-warning,
   .button-secondary {
     color: white;
-    border-radius: 4px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
   }
 
   .button-success {
-    background: rgb(28, 184, 65);
-    /* this is a green */
+    border: 1px solid rgb(28, 184, 65);
+    color: rgb(28, 184, 65);
+    background: transparent;
+
+    &:hover {
+      background: rgb(28, 184, 65);
+      color: white;
+    }
   }
 
   .button-error {
-    background: rgb(202, 60, 60);
-    /* this is a maroon */
+    border: 1px solid rgb(202, 60, 60);
+    color: rgb(202, 60, 60);
+    background: transparent;
+
+    &:hover {
+      background: rgb(202, 60, 60);
+      color: white;
+    }
   }
 
   .button-warning {
-    background: rgb(223, 117, 20);
-    /* this is an orange */
+    border: 1px solid rgb(223, 117, 20);
+    color: rgb(223, 117, 20);
+    background: transparent;
+
+    &:hover {
+      background: rgb(223, 117, 20);
+      color: white;
+    }
   }
 
   .button-secondary {
-    background: rgb(66, 184, 221);
-    /* this is a light blue */
+    border: 2px solid rgb(66, 184, 221);
+    color: rgb(66, 184, 221);
+    background: transparent;
+
+    &:hover {
+      background: rgb(66, 184, 221);
+      color: white;
+    }
   }
 
   /*
