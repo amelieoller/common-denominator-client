@@ -14,7 +14,6 @@ const NewTile = ({ handleAddNewItem, placeholderText, buttonText }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsEditing(false);
     resetText();
 
     if (!text || e.target.dataset.type === "discard") return;

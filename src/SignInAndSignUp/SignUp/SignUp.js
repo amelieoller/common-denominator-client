@@ -64,9 +64,10 @@ const SignUpForm = ({ firebase, history }) => {
     username === "";
 
   return (
-    <div>
-      <h1>SignUp</h1>
-      <form onSubmit={onSubmit}>
+    <div className="splash">
+      <h2 className="content-head content-head-ribbon">Sign Up</h2>
+
+      <form onSubmit={onSubmit} className="pure-form pure-form-stacked">
         <input
           name="username"
           value={username}
@@ -96,7 +97,7 @@ const SignUpForm = ({ firebase, history }) => {
           placeholder="Confirm Password"
         />
 
-        <button disabled={isInvalid} type="submit">
+        <button disabled={isInvalid} type="submit" className="pure-button">
           Sign Up
         </button>
 
