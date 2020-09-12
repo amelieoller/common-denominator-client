@@ -8,13 +8,15 @@ const Tile = ({ children, ...props }) => {
 
 const StyledItemTile = styled.div`
   background: white;
-  height: 130px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  height: 160px;
   border-radius: ${({ theme }) => theme.borderRadius};
   padding: ${({ theme }) => theme.padding};
-  cursor: ${({ isLinkable }) => isLinkable && "pointer"};
+  cursor: ${({ isLinkable, addCursor }) =>
+    (isLinkable || addCursor) && "pointer"};
+  border: 1px solid #d7d7d7;
+  display: ${({ isLinkable }) => isLinkable && "flex"};
+  align-items: ${({ isLinkable }) => isLinkable && "flex-end"};
+  justify-content: ${({ isLinkable }) => isLinkable && "space-between"};
 
   h2 {
     margin: 0;
