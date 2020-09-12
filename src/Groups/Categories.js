@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import styled from "styled-components/macro";
 
 import NewTile from "../NewTile/NewTile";
 import GroupSettingsTile from "./GroupSettingsTile";
 import Tiles from "../Tiles/Tiles";
 import Category from "./Category";
 import { formatNames } from "../utils";
+import Title from "../Title/Title";
 
 const Categories = ({ group, firebase, categories, history }) => {
   const [loading, setLoading] = useState(true);
@@ -22,9 +24,11 @@ const Categories = ({ group, firebase, categories, history }) => {
 
   return (
     <div>
-      <h1 className="content-head content-head-ribbon">
-        {formatNames(groupMembers, "Categories")}
-      </h1>
+      <Title backButtonText="Groups" backLink="/groups">
+        <h1 className="content-head content-head-ribbon">
+          {formatNames(groupMembers, "Categories")}
+        </h1>
+      </Title>
 
       <Tiles>
         {categories.map((category) => (

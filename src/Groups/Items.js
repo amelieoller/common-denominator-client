@@ -6,6 +6,7 @@ import Tiles from "../Tiles/Tiles";
 import Item from "./Item";
 import NewTile from "../NewTile/NewTile";
 import { formatNames } from "../utils";
+import Title from "../Title/Title";
 
 const Items = ({ group, category, firebase, authUser }) => {
   const [items, setItems] = useState([]);
@@ -105,9 +106,14 @@ const Items = ({ group, category, firebase, authUser }) => {
 
   return (
     <div>
-      <h1 className="content-head content-head-ribbon">
-        {formatNames(groupMembers, category.title)}
-      </h1>
+      <Title
+        backButtonText="Categories"
+        backLink={`/groups/${group.uid}/categories`}
+      >
+        <h1 className="content-head content-head-ribbon">
+          {formatNames(groupMembers, category.title)}
+        </h1>
+      </Title>
 
       <Tiles>
         {items &&

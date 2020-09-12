@@ -4,6 +4,7 @@ import { withFirebase } from "../components/Firebase";
 import Tiles from "../Tiles/Tiles";
 import NewTile from "../NewTile/NewTile";
 import GroupItem from "./GroupItem";
+import Title from "../Title/Title";
 
 class Groups extends Component {
   onChangeTitle = (event) => {
@@ -48,7 +49,9 @@ class Groups extends Component {
 
     return (
       <>
-        <h1 className="content-head content-head-ribbon">Groups</h1>
+        <Title>
+          <h1 className="content-head content-head-ribbon">Groups</h1>
+        </Title>
 
         {!groups && <div>There are no groups ...</div>}
 
