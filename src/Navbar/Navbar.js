@@ -1,42 +1,50 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { compose } from "recompose";
+import styled from "styled-components/macro";
 
 import { AuthUserContext } from "../Session";
 import * as ROUTES from "../constants/routes";
 import { withFirebase } from "../components/Firebase";
+
+const StyledMenuItem = styled.li``;
+
+const ButtonWrapper = styled(Link)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 13px;
+  line-height: 18px;
+
+  i {
+    font-size: 21px;
+  }
+`;
 
 const Navbar = ({ location, firebase }) => {
   const currentPath = location.pathname;
   const menuItem = "pure-menu-item";
   const selectedItem = "pure-menu-item pure-menu-selected";
 
-  const renderMenuItem = (path) => {
+  const MenuItem = ({ children, path, onClick }) => {
     const routePath = path.split(" ").join("_").toUpperCase();
 
     return (
-      <li
+      <StyledMenuItem
         className={currentPath === ROUTES[routePath] ? selectedItem : menuItem}
+        onClick={onClick}
       >
-        <Link to={ROUTES[routePath]} className="pure-menu-link">
-          {path}
-        </Link>
-      </li>
+        <ButtonWrapper to={ROUTES[routePath]} className="pure-menu-link">
+          {children}
+        </ButtonWrapper>
+      </StyledMenuItem>
     );
   };
 
   const renderMenuHeading = (text) => (
-    <Link to="/" className="pure-menu-heading">
+    <Link to="/groups" className="pure-menu-heading">
       {text}
     </Link>
-  );
-
-  const renderMenuButton = (buttonText, onClick) => (
-    <li className={menuItem}>
-      <button type="button" onClick={onClick}>
-        {buttonText}
-      </button>
-    </li>
   );
 
   return (
@@ -49,11 +57,20 @@ const Navbar = ({ location, firebase }) => {
                 {renderMenuHeading(`Hi ${authUser.username}!`)}
 
                 <ul className="pure-menu-list">
-                  {renderMenuItem("Home")}
-                  {renderMenuItem("Groups")}
-                  {renderMenuItem("Account")}
+                  <MenuItem path="Groups">
+                    <i className="fas fa-users"></i>
+                    <span>Groups</span>
+                  </MenuItem>
 
-                  {renderMenuButton("Sign Out", firebase.doSignOut)}
+                  <MenuItem path="Account">
+                    <i className="fas fa-cog"></i>
+                    <span>Account</span>
+                  </MenuItem>
+
+                  <MenuItem path="Sign In" onClick={firebase.doSignOut}>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sign Out</span>
+                  </MenuItem>
                 </ul>
               </>
             ) : (
@@ -61,8 +78,10 @@ const Navbar = ({ location, firebase }) => {
                 {renderMenuHeading("Common Denominator")}
 
                 <ul className="pure-menu-list">
-                  {renderMenuItem("Home")}
-                  {renderMenuItem("Sign In")}
+                  <MenuItem path="Sign In">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Sign In</span>
+                  </MenuItem>
                 </ul>
               </>
             )
