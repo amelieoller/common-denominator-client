@@ -2,39 +2,47 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const Categories = ({ group, firebase, categories }) => {
+import NewTile from "../NewTile/NewTile";
+import GroupSettingsTile from "./GroupSettingsTile";
+import Tiles from "../Tiles/Tiles";
+import Category from "./Category";
+import { formatNames } from "../utils";
+
+const Categories = ({ group, firebase, categories, history }) => {
   const [loading, setLoading] = useState(true);
-  const [newCategoryTitle, setNewCategoryTitle] = useState(true);
 
-  const onCreateCategory = (e, authUser) => {
-    e.preventDefault();
-
+  const onCreateCategory = (text) => {
     firebase.categories(group.uid).add({
-      title: newCategoryTitle,
+      title: text,
       createdAt: firebase.fieldValue.serverTimestamp(),
     });
   };
 
+  const groupMembers = group.users.map((user) => user.username);
+
   return (
     <div>
-      Group Title: {group.title}
-      <ul>
+      <h1 className="content-head content-head-ribbon">
+        {formatNames(groupMembers, "Categories")}
+      </h1>
+
+      <Tiles>
         {categories.map((category) => (
-          <Link
+          <Category
             key={category.uid}
-            to={`/groups/${group.uid}/categories/${category.uid}/items`}
-          >
-            {category.title}
-          </Link>
+            category={category}
+            history={history}
+            group={group}
+            firebase={firebase}
+          />
         ))}
-      </ul>
-      <form action="" onSubmit={onCreateCategory}>
-        <input
-          type="text"
-          onChange={(e) => setNewCategoryTitle(e.target.value)}
+        <NewTile
+          handleAddNewItem={onCreateCategory}
+          placeholderText="Add New Category"
+          buttonText="Add"
         />
-        <button onClick={onCreateCategory}>submit</button>
-      </form>
+        <GroupSettingsTile group={group} firebase={firebase} />
+      </Tiles>
     </div>
   );
 };

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import styled from "styled-components/macro";
 
-import { AuthUserContext } from "../Session";
+import { AuthUserContext, withAuthorization } from "../Session";
 import { withFirebase } from "../components/Firebase";
 import { Switch, Route } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 import Groups from "./Groups";
 import Items from "./Items";
 import CategoriesPage from "./CategoriesPage";
+import { compose } from "recompose";
 
 class GroupsPage extends Component {
   constructor(props) {
@@ -59,10 +61,10 @@ class GroupsPage extends Component {
     return (
       <AuthUserContext.Consumer>
         {(authUser) => (
-          <div>
+          <StyledGroupsPage>
             {loading && <div>Loading ...</div>}
 
-            {!!groups.length && (
+            {groups && !!groups.length && (
               <Switch>
                 <Route
                   path={ROUTES.CATEGORIES}
@@ -70,13 +72,18 @@ class GroupsPage extends Component {
                     const groupId = routerProps.match.params.groupId;
                     const group = groups.find((g) => g.uid === groupId);
 
-                    return (
-                      <CategoriesPage
-                        group={group}
-                        firebase={this.props.firebase}
-                        {...routerProps}
-                      />
-                    );
+                    if (group) {
+                      return (
+                        <CategoriesPage
+                          group={group}
+                          firebase={this.props.firebase}
+                          authUser={authUser}
+                          {...routerProps}
+                        />
+                      );
+                    } else {
+                      this.props.history.push("groups");
+                    }
                   }}
                 />
 
@@ -92,11 +99,17 @@ class GroupsPage extends Component {
                 />
               </Switch>
             )}
-          </div>
+          </StyledGroupsPage>
         )}
       </AuthUserContext.Consumer>
     );
   }
 }
 
-export default withFirebase(GroupsPage);
+const StyledGroupsPage = styled.div`
+  padding: ${({ theme }) => theme.padding};
+`;
+
+const condition = (authUser) => !!authUser;
+
+export default compose(withFirebase, withAuthorization(condition))(GroupsPage);

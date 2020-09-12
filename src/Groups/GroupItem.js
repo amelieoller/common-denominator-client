@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Tile from "../Tile/Tile";
+import { formatNames } from "../utils";
 
-const GroupItem = ({ authUser, group, onRemoveGroup, onEditGroup }) => {
+const GroupItem = ({
+  authUser,
+  group,
+  onRemoveGroup,
+  onEditGroup,
+  history,
+}) => {
   const [editMode, setEditMode] = useState(false);
   const [editText, setEditText] = useState(group.title);
 
-  const onToggleEditMode = () => {
+  const onToggleEditMode = (e) => {
+    e.stopPropagation();
     setEditMode(!editMode);
     setEditText(group.title);
   };
@@ -20,34 +29,47 @@ const GroupItem = ({ authUser, group, onRemoveGroup, onEditGroup }) => {
     setEditMode(false);
   };
 
+  const routeTo = () => {
+    history.push(`/groups/${group.uid}/categories`);
+  };
+
+  const groupMembers = group.users.map((user) => user.username);
+
   return (
-    <li>
+    <Tile isLinkable onClick={() => routeTo()}>
       {editMode ? (
         <input type="text" value={editText} onChange={onChangeEditText} />
       ) : (
-        <Link to={`/groups/${group.uid}/categories`}>
-          <strong>{group.userIds}</strong> {group.title}
-          {group.editedAt && <span>(Edited)</span>}
-        </Link>
+        <h2>{formatNames(groupMembers)}</h2>
       )}
 
       <span>
         {editMode ? (
           <span>
-            <button onClick={onSaveEditText}>Save</button>
-            <button onClick={onToggleEditMode}>Reset</button>
+            <button onClick={onSaveEditText} className="pure-button">
+              Save
+            </button>
+            <button onClick={onToggleEditMode} className="pure-button">
+              Reset
+            </button>
           </span>
         ) : (
-          <button onClick={onToggleEditMode}>Edit</button>
+          <button onClick={onToggleEditMode} className="pure-button ">
+            <i className="fas fa-edit"></i>
+          </button>
         )}
 
         {!editMode && (
-          <button type="button" onClick={() => onRemoveGroup(group.uid)}>
-            Delete
+          <button
+            type="button"
+            onClick={() => onRemoveGroup(group.uid)}
+            className="pure-button button-error"
+          >
+            <i className="fas fa-trash"></i>
           </button>
         )}
       </span>
-    </li>
+    </Tile>
   );
 };
 

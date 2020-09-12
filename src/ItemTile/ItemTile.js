@@ -5,9 +5,15 @@ import styled from "styled-components/macro";
 import useCategories from "../hooks/useCategories";
 import Tile from "../Tile/Tile";
 
-const ItemTile = ({ item, deleteItem, updateItem, updateItemRating }) => {
+const ItemTile = ({
+  item,
+  deleteItem,
+  updateItem,
+  updateItemRating,
+  userId,
+}) => {
   const [title, setTitle] = useState(item.title);
-  const [rating, setRating] = useState(item.currentUserRating.value);
+  const [rating, setRating] = useState(item?.ratings[userId] || 0);
   const [saved, setSaved] = useState(true);
 
   useEffect(() => {
@@ -64,14 +70,14 @@ const ItemTile = ({ item, deleteItem, updateItem, updateItemRating }) => {
     if (saved) return;
 
     setSaved(true);
-    updateItem({ ...item, title });
+    updateItem(title);
   };
 
   const handleOnRatingBlur = () => {
     if (saved) return;
 
     setSaved(true);
-    updateItemRating(item, { ...item.currentUserRating, value: +rating });
+    updateItemRating(+rating);
   };
 
   return (

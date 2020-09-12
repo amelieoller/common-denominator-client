@@ -5,7 +5,7 @@ import Items from "./Items";
 import * as ROUTES from "../constants/routes";
 import Categories from "./Categories";
 
-const CategoriesPage = ({ group, match, firebase }) => {
+const CategoriesPage = ({ group, match, firebase, authUser }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newCategoryTitle, setNewCategoryTitle] = useState(true);
@@ -27,7 +27,7 @@ const CategoriesPage = ({ group, match, firebase }) => {
           setCategories(categories.reverse());
         } else {
           setLoading(false);
-          setCategories(null);
+          setCategories([]);
         }
       });
 
@@ -40,7 +40,7 @@ const CategoriesPage = ({ group, match, firebase }) => {
     <div>
       {loading && <div>Loading ...</div>}
 
-      {categories && !!categories.length && (
+      {categories && (
         <Switch>
           <Route
             path={ROUTES.ITEMS}
@@ -48,14 +48,17 @@ const CategoriesPage = ({ group, match, firebase }) => {
               const categoryId = routerProps.match.params.categoryId;
               const category = categories.find((g) => g.uid === categoryId);
 
-              return (
-                <Items
-                  group={group}
-                  category={category}
-                  firebase={firebase}
-                  {...routerProps}
-                />
-              );
+              if (category) {
+                return (
+                  <Items
+                    group={group}
+                    category={category}
+                    firebase={firebase}
+                    authUser={authUser}
+                    {...routerProps}
+                  />
+                );
+              }
             }}
           />
 

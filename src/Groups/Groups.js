@@ -1,26 +1,25 @@
 import React, { Component } from "react";
 
 import { withFirebase } from "../components/Firebase";
-import GroupList from "./GroupList";
+import Tiles from "../Tiles/Tiles";
+import NewTile from "../NewTile/NewTile";
+import GroupItem from "./GroupItem";
 
 class Groups extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      title: "",
-      loading: false,
-    };
-  }
-
   onChangeTitle = (event) => {
     this.setState({ title: event.target.value });
   };
 
-  onCreateGroup = (event, authUser) => {
+  onCreateGroup = (text) => {
     this.props.firebase.groups().add({
-      title: this.state.title,
-      userIds: [authUser.uid],
+      title: text,
+      userIds: [this.props.authUser.uid],
+      users: [
+        {
+          username: this.props.authUser.username,
+          uid: this.props.authUser.uid,
+        },
+      ],
       createdAt: this.props.firebase.fieldValue.serverTimestamp(),
       randomness: 1,
       harmony: 1,
@@ -28,8 +27,6 @@ class Groups extends Component {
     });
 
     this.setState({ title: "" });
-
-    event.preventDefault();
   };
 
   onEditGroup = (group, title) => {
@@ -47,26 +44,32 @@ class Groups extends Component {
   };
 
   render() {
-    const { title, loading } = this.state;
     const { groups, authUser } = this.props;
 
     return (
       <>
-        {groups && (
-          <GroupList
-            authUser={authUser}
-            groups={groups}
-            onEditGroup={this.onEditGroup}
-            onRemoveGroup={this.onRemoveGroup}
-          />
-        )}
+        <h1 className="content-head content-head-ribbon">Groups</h1>
 
         {!groups && <div>There are no groups ...</div>}
 
-        <form onSubmit={(event) => this.onCreateGroup(event, authUser)}>
-          <input type="text" value={title} onChange={this.onChangeTitle} />
-          <button type="submit">Create Group</button>
-        </form>
+        <Tiles>
+          {groups.map((group) => (
+            <GroupItem
+              authUser={authUser}
+              key={group.uid}
+              group={group}
+              onEditGroup={this.onEditGroup}
+              onRemoveGroup={this.onRemoveGroup}
+              history={this.props.history}
+            />
+          ))}
+
+          <NewTile
+            handleAddNewItem={this.onCreateGroup}
+            placeholderText="Add New Group"
+            buttonText="Add"
+          />
+        </Tiles>
       </>
     );
   }

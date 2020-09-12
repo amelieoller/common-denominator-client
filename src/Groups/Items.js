@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
-const Items = ({ group, category, firebase }) => {
+import Tiles from "../Tiles/Tiles";
+
+import Item from "./Item";
+import NewTile from "../NewTile/NewTile";
+import { formatNames } from "../utils";
+
+const Items = ({ group, category, firebase, authUser }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newItemTitle, setNewItemTitle] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -29,28 +33,103 @@ const Items = ({ group, category, firebase }) => {
     return () => {
       unsubscribe();
     };
-  }, [category.id, category.uid, firebase, group.uid]);
+  }, [category.uid, firebase, group.uid]);
 
-  const onCreateItem = (e, authUser) => {
-    e.preventDefault();
-
+  const onCreateItem = (text) => {
     firebase.items(group.uid, category.uid).add({
-      title: newItemTitle,
+      title: text,
       createdAt: firebase.fieldValue.serverTimestamp(),
+      ratings: {},
     });
   };
-  console.log("items", items);
+
+  const handleOnDone = () => {
+    console.log(items);
+    const userA = group.users[0];
+    const userB = group.users[1];
+    const harmonyCoefficient = group.harmony;
+    const randomMultiplier = (2 + harmonyCoefficient * 5) * group.randomness;
+    const randomTerm = Math.floor(Math.random() * randomMultiplier);
+
+    debugger;
+    const results = items.map((item) => {
+      const ratings = item.ratings;
+      let ratingA;
+      let ratingB;
+
+      group.users.map((user) => {
+        const currentUserRating = ratings[user.uid];
+
+        const result =
+          voteA +
+          voteB +
+          harmonyCoefficient * voteA * voteB -
+          harmonyCoefficient * difference +
+          randomTerm;
+
+        return result;
+      });
+
+      const voteA = ratingA.value;
+      const voteB = ratingB.value;
+
+      const difference = (voteA - voteB).abs;
+
+      // const privilegeA = userA.privilege;
+      // const privilegeB = userB.privilege;
+
+      // const result =
+      //   privilegeA * voteA +
+      //   privilegeB * voteB +
+      //   harmonyCoefficient * voteA * voteB -
+      //   harmonyCoefficient * difference +
+      //   randomTerm;
+
+      const result =
+        voteA +
+        voteB +
+        harmonyCoefficient * voteA * voteB -
+        harmonyCoefficient * difference +
+        randomTerm;
+
+      return result;
+    });
+
+    const resultIndex = results.each_with_index.max[1];
+    const resultItem = category.items[resultIndex];
+
+    return resultItem;
+  };
+
+  const groupMembers = group.users.map((user) => user.username);
 
   return (
     <div>
-      Category Title: {category.title}
-      <ul>
-        {items && items.map((item) => <li key={item.uid}>{item.title}</li>)}
-      </ul>
-      <form action="" onSubmit={onCreateItem}>
-        <input type="text" onChange={(e) => setNewItemTitle(e.target.value)} />
-        <button onClick={onCreateItem}>submit</button>
-      </form>
+      <h1 className="content-head content-head-ribbon">
+        {formatNames(groupMembers, category.title)}
+      </h1>
+
+      <Tiles>
+        {items &&
+          items.map((item) => (
+            <Item
+              key={item.uid}
+              group={group}
+              category={category}
+              item={item}
+              firebase={firebase}
+              authUser={authUser}
+            />
+          ))}
+        <NewTile
+          handleAddNewItem={onCreateItem}
+          placeholderText="Add New Item"
+          buttonText="Add"
+        />
+      </Tiles>
+      <button className="pure-button" onClick={handleOnDone}>
+        Done
+      </button>
     </div>
   );
 };

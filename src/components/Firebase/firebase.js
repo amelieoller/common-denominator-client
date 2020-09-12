@@ -87,12 +87,15 @@ class Firebase {
   groups = () => this.db.collection("groups");
 
   // *** Category API ***
-  category = (uid) => this.db.doc(`categories/${uid}`);
+  category = (groupUid, categoryUid) =>
+    this.db.doc(`groups/${groupUid}/categories/${categoryUid}`);
   categories = (uid) => this.db.collection(`groups/${uid}/categories`);
 
   // *** Items API ***
-  item = (groupUid, categoryUid) =>
-    this.db.doc(`groups/${groupUid}/categories/${categoryUid}`);
+  item = (groupUid, categoryUid, itemUid) =>
+    this.db.doc(
+      `groups/${groupUid}/categories/${categoryUid}/items/${itemUid}`
+    );
   items = (groupUid, categoryUid) =>
     this.db.collection(`groups/${groupUid}/categories/${categoryUid}/items`);
 }
