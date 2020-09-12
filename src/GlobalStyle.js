@@ -275,12 +275,11 @@ export default styled.createGlobalStyle`
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin: 2em 0 1em;
   }
 
   /* This is a modifier class used when the content-head is inside a ribbon */
   .content-head-ribbon {
-    color: white;
+    /* color: white; */
   }
 
   /* This is the class used for the content sub-headers (<h3>) */

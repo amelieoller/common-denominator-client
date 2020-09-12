@@ -11,10 +11,14 @@ import SignUpPage from "./SignInAndSignUp/SignUp/SignUp";
 import Account from "./Account/Account";
 import PasswordForgetPage from "./Password/PasswordForget/PasswordForget";
 import GroupsPage from "./Groups/GroupsPage";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme";
+import GlobalStyle from "./GlobalStyle";
 
 const App = () => (
   <Router>
-    <div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Navbar />
 
       <Switch>
@@ -26,7 +30,7 @@ const App = () => (
         <Route path={ROUTES.ITEMS} component={HomePage} />
         <Route path={ROUTES.ACCOUNT} component={Account} />
       </Switch>
-    </div>
+    </ThemeProvider>
   </Router>
 );
 

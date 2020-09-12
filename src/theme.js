@@ -1,6 +1,6 @@
 export const theme = {
-  background: "#22343C",
-  onBackground: "#FFFFFF",
+  background: "#f1f1f1",
+  onBackground: "#22343C",
   padding: "15px",
   borderRadius: "10px",
   borderRadiusSmall: "6px",
