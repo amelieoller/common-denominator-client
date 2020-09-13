@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import styled from "styled-components/macro";
 
 import { withFirebase } from "../../components/Firebase";
 import * as ROUTES from "../../constants/routes";
@@ -20,6 +22,10 @@ const SignUpForm = ({ firebase, history }) => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (error) setTimeout(() => setError(null), 5000);
+  }, [error]);
 
   const onSubmit = (event) => {
     firebase
@@ -65,15 +71,17 @@ const SignUpForm = ({ firebase, history }) => {
 
   return (
     <div className="splash">
-      <h2 className="content-head content-head-ribbon">Sign Up</h2>
+      <h1 className="content-head content-head-ribbon">Sign Up</h1>
 
       <form onSubmit={onSubmit} className="pure-form pure-form-stacked">
+        {error && <div className="notification error">{error.message}</div>}
+
         <input
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           type="text"
-          placeholder="Full Name"
+          placeholder="Username"
         />
         <input
           name="email"
@@ -94,17 +102,29 @@ const SignUpForm = ({ firebase, history }) => {
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           type="password"
-          placeholder="Confirm Password"
+          placeholder="Password Confirmation"
         />
 
-        <button disabled={isInvalid} type="submit" className="pure-button">
+        <button
+          disabled={isInvalid}
+          type="submit"
+          className="pure-button pure-button-primary"
+          style={{ display: "flex" }}
+        >
           Sign Up
         </button>
 
-        {error && <p>{error.message}</p>}
+        <Notification>
+          Already have an account? <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+        </Notification>
       </form>
     </div>
   );
 };
+
+const Notification = styled.p`
+  color: ${({ theme }) => theme.light};
+  margin-top: ${({ theme }) => theme.paddingLarge};
+`;
 
 export default withRouter(withFirebase(SignUpForm));

@@ -121,6 +121,15 @@ export default styled.createGlobalStyle`
     appearance: none;
   }
 
+  .inline-form {
+    display: flex;
+    align-items: flex-start;
+
+    & > *:not(:last-child) {
+      margin-right: ${({ theme }) => theme.padding};
+    }
+  }
+
   /*
  * -- PURE BUTTON STYLES --
  * I want my pure-button elements to look a little different
@@ -265,7 +274,7 @@ export default styled.createGlobalStyle`
   .splash {
     /* absolute center .splash within .splash-container */
     width: 50%;
-    height: 50%;
+    height: 70%;
     margin: auto;
     position: absolute;
     top: 100px;
@@ -276,9 +285,16 @@ export default styled.createGlobalStyle`
   }
 
   .notification {
-    color: ${({ theme }) => theme.secondary};
+    color: ${({ theme }) => theme.primary};
     font-style: italic;
     font-size: 14px;
+    line-height: 14px;
+    text-align: left;
+    padding: 3px 0;
+
+    &.error {
+      color: ${({ theme }) => theme.secondary};
+    }
   }
 
   /* This is the main heading that appears on the blue section */
@@ -333,6 +349,7 @@ export default styled.createGlobalStyle`
   .content-subhead {
     color: #1f8dd6;
   }
+
   .content-subhead i {
     margin-right: 7px;
   }
@@ -380,7 +397,7 @@ export default styled.createGlobalStyle`
     to work with */
     .splash {
       width: 40%;
-      height: 60%;
+      height: 70%;
     }
 
     .splash-head {

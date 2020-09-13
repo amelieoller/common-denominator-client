@@ -1,68 +1,73 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
+import Spinner from "../../atoms/Spinner/Spinner";
 
 import { withFirebase } from "../../components/Firebase";
+import useFormInput from "../../hooks/useFormInput";
 
 const PasswordForgetPage = () => (
-  <div>
-    <h1>PasswordForget</h1>
+  <div className="splash">
+    <h1 className="content-head content-head-ribbon">Reset Your Password</h1>
     <PasswordForgetForm />
   </div>
 );
 
-const INITIAL_STATE = {
-  email: "",
-  error: null,
-};
+const PasswordForgetFormBase = ({ firebase }) => {
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-class PasswordForgetFormBase extends Component {
-  constructor(props) {
-    super(props);
+  const [email, bindEmail, resetEmail] = useFormInput("");
 
-    this.state = { ...INITIAL_STATE };
-  }
+  useEffect(() => {
+    if (error) setTimeout(() => setError(null), 5000);
+    if (message) setTimeout(() => setMessage(null), 5000);
+  }, [error, message]);
 
-  onSubmit = (event) => {
-    const { email } = this.state;
+  const onSubmit = (e) => {
+    setLoading(true);
 
-    this.props.firebase
+    firebase
       .doPasswordReset(email)
-      .then(() => {
-        this.setState({ ...INITIAL_STATE });
+      .then((test) => {
+        resetEmail();
+        setMessage("Email was sent, please check your inbox.");
+        setLoading(false);
+        setError(null);
       })
       .catch((error) => {
-        this.setState({ error });
+        setError(error);
+        setLoading(false);
       });
 
-    event.preventDefault();
+    e.preventDefault();
   };
 
-  onChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
+  const isInvalid = email === "";
 
-  render() {
-    const { email, error } = this.state;
+  return (
+    <>
+      <h4 style={{ margin: 0, textAlign: "left" }}>Reset Password</h4>
+      {error && <div className="notification error">{error.message}</div>}
+      {message && <div className="notification">{message}</div>}
 
-    const isInvalid = email === "";
-
-    return (
-      <form onSubmit={this.onSubmit}>
+      <form className="pure-form inline-form" onSubmit={onSubmit}>
         <input
           name="email"
-          value={this.state.email}
-          onChange={this.onChange}
+          {...bindEmail}
           type="text"
           placeholder="Email Address"
         />
-        <button disabled={isInvalid} type="submit">
-          Reset My Password
+        <button
+          disabled={isInvalid}
+          type="submit"
+          className="pure-button pure-button-primary"
+        >
+          {loading ? <Spinner small /> : "Reset Password"}
         </button>
-
-        {error && <p>{error.message}</p>}
       </form>
-    );
-  }
-}
+    </>
+  );
+};
 
 export default PasswordForgetPage;
 

@@ -1,9 +1,11 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { compose } from "recompose";
+import styled from "styled-components/macro";
 
 import { withFirebase } from "../../components/Firebase";
 import * as ROUTES from "../../constants/routes";
+import Spinner from "../../atoms/Spinner/Spinner";
 
 const ERROR_CODE_ACCOUNT_EXISTS =
   "auth/account-exists-with-different-credential";
@@ -19,6 +21,11 @@ const SignInPage = ({ history, firebase }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (error) setTimeout(() => setError(null), 5000);
+  }, [error]);
 
   const onSubmit = (event) => {
     firebase
@@ -30,20 +37,22 @@ const SignInPage = ({ history, firebase }) => {
 
         history.push(ROUTES.GROUPS);
       })
-      .catch((error) => {
-        setError(error);
-      });
+      .catch(setError);
 
     event.preventDefault();
   };
 
   const isInvalid = password === "" || email === "";
 
+  if (loading) return <Spinner />;
+
   return (
     <div className="splash">
-      <h2 className="content-head content-head-ribbon">Sign In</h2>
+      <h1 className="content-head content-head-ribbon">Sign In</h1>
 
       <form onSubmit={onSubmit} className="pure-form pure-form-stacked">
+        {error && <div className="notification">{error.message}</div>}
+
         <input
           name="email"
           value={email}
@@ -59,34 +68,58 @@ const SignInPage = ({ history, firebase }) => {
           placeholder="Password"
         />
 
-        <p>
-          <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
-        </p>
+        <SignInFooter>
+          <button
+            disabled={isInvalid}
+            type="submit"
+            className="pure-button pure-button-primary"
+          >
+            Sign In
+          </button>
 
-        <button disabled={isInvalid} type="submit" className="pure-button">
-          Sign In
-        </button>
-
-        {error && <p>{error.message}</p>}
+          <ForgotPasswordLink>
+            <Link to={ROUTES.PASSWORD_FORGET}>Forgot Your Password?</Link>
+          </ForgotPasswordLink>
+        </SignInFooter>
       </form>
 
-      <SignInGoogle history={history} firebase={firebase} />
+      <SignInGoogle
+        history={history}
+        firebase={firebase}
+        setLoading={setLoading}
+      />
 
-      <p>
-        Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
-      </p>
+      <Notification>
+        Don't have an account yet? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+      </Notification>
     </div>
   );
 };
 
-const SignInGoogle = ({ firebase, history }) => {
+const Notification = styled.p`
+  color: ${({ theme }) => theme.light};
+`;
+
+const SignInFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const SignInGoogle = ({ firebase, history, setLoading }) => {
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (error) setTimeout(() => setError(null), 5000);
+  }, [error]);
+
   const handleSignInWithGoogle = (event) => {
+    setLoading(true);
+
     firebase
       .doSignInWithGoogle()
       .then((socialAuthUser) => {
         // Create a user in your Firebase Realtime Database too
+
         return firebase.user(socialAuthUser.user.uid).set(
           {
             username: socialAuthUser.user.displayName,
@@ -95,15 +128,13 @@ const SignInGoogle = ({ firebase, history }) => {
           { merge: true }
         );
       })
-      .then(() => {
-        setError(null);
-        history.push(ROUTES.GROUPS);
-      })
+      .then(() => history.push(ROUTES.GROUPS))
       .catch((error) => {
         if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
           error.message = ERROR_MSG_ACCOUNT_EXISTS;
         }
 
+        setLoading(false);
         setError(error);
       });
 
@@ -111,14 +142,22 @@ const SignInGoogle = ({ firebase, history }) => {
   };
 
   return (
-    <form onSubmit={handleSignInWithGoogle}>
-      <button type="submit" className="pure-button">
-        Sign In with Google
+    <GoogleFormWrapper onSubmit={handleSignInWithGoogle}>
+      <button type="submit" className="pure-button pure-button-primary">
+        Sign in With Google
       </button>
 
       {error && <p>{error.message}</p>}
-    </form>
+    </GoogleFormWrapper>
   );
 };
+
+const ForgotPasswordLink = styled.p`
+  text-align: right;
+`;
+
+const GoogleFormWrapper = styled.form`
+  margin: ${({ theme }) => theme.paddingLarge} 0;
+`;
 
 export default compose(withRouter, withFirebase)(SignInPage);

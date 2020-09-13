@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { compose } from "recompose";
+import styled from "styled-components/macro";
 
 import {
   AuthUserContext,
@@ -9,6 +10,7 @@ import {
 import { withFirebase } from "../components/Firebase";
 import { PasswordForgetForm } from "../Password/PasswordForget/PasswordForget";
 import PasswordChangeForm from "../Password/PasswordChange/PasswordChange";
+import useFormInput from "../hooks/useFormInput";
 
 const SIGN_IN_METHODS = [
   {
@@ -24,8 +26,11 @@ const SIGN_IN_METHODS = [
 const AccountPage = () => (
   <AuthUserContext.Consumer>
     {(authUser) => (
-      <div>
-        <h1>Account: {authUser.email}</h1>
+      <div className="splash">
+        <h1 className="content-head content-head-ribbon">Account</h1>
+
+        <h3>{authUser.email}</h3>
+
         <PasswordForgetForm />
         <PasswordChangeForm />
         <LoginManagement authUser={authUser} />
@@ -34,94 +39,98 @@ const AccountPage = () => (
   </AuthUserContext.Consumer>
 );
 
-class LoginManagementBase extends Component {
-  constructor(props) {
-    super(props);
+const LoginManagementBase = ({ firebase, authUser }) => {
+  const [activeSignInMethods, setActiveSignInMethods] = useState([]);
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
 
-    this.state = {
-      activeSignInMethods: [],
-      error: null,
-    };
-  }
-
-  componentDidMount() {
-    this.fetchSignInMethods();
-  }
-
-  fetchSignInMethods = () => {
-    this.props.firebase.auth
-      .fetchSignInMethodsForEmail(this.props.authUser.email)
-      .then((activeSignInMethods) =>
-        this.setState({ activeSignInMethods, error: null })
-      )
-      .catch((error) => this.setState({ error }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const fetchSignInMethods = () => {
+    firebase.auth
+      .fetchSignInMethodsForEmail(authUser.email)
+      .then(setActiveSignInMethods)
+      .catch(setError);
   };
 
-  onSocialLoginLink = (provider) => {
-    this.props.firebase.auth.currentUser
-      .linkWithPopup(this.props.firebase[provider])
-      .then(this.fetchSignInMethods)
-      .catch((error) => this.setState({ error }));
+  useEffect(() => {
+    fetchSignInMethods();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (error) setTimeout(() => setError(null), 5000);
+    if (message) setTimeout(() => setMessage(null), 5000);
+  }, [error, message]);
+
+  const onSocialLoginLink = (provider) => {
+    firebase.auth.currentUser
+      .linkWithPopup(firebase[provider])
+      .then(() => {
+        setMessage("Successfully linked sign in method");
+        fetchSignInMethods();
+      })
+      .catch(setError);
   };
 
-  onDefaultLoginLink = (password) => {
-    const credential = this.props.firebase.emailAuthProvider.credential(
-      this.props.authUser.email,
+  const onDefaultLoginLink = (password) => {
+    const credential = firebase.emailAuthProvider.credential(
+      authUser.email,
       password
     );
 
-    this.props.firebase.auth.currentUser
+    firebase.auth.currentUser
       .linkAndRetrieveDataWithCredential(credential)
-      .then(this.fetchSignInMethods)
-      .catch((error) => this.setState({ error }));
+      .then(fetchSignInMethods)
+      .catch(setError);
   };
 
-  onUnlink = (providerId) => {
-    this.props.firebase.auth.currentUser
+  const onUnlink = (providerId) => {
+    firebase.auth.currentUser
       .unlink(providerId)
-      .then(this.fetchSignInMethods)
-      .catch((error) => this.setState({ error }));
+      .then(() => {
+        setMessage("Successfully unlinked sign in method");
+        fetchSignInMethods();
+      })
+      .catch(setError);
   };
 
-  render() {
-    const { activeSignInMethods, error } = this.state;
+  return (
+    <div>
+      <h2>Active Sign In Methods</h2>
+      {error && <div className="notification error">{error.message}</div>}
+      {message && <div className="notification">{message}</div>}
 
-    return (
-      <div>
-        Sign In Methods:
-        <ul>
-          {SIGN_IN_METHODS.map((signInMethod) => {
-            const onlyOneLeft = activeSignInMethods.length === 1;
-            const isEnabled = activeSignInMethods.includes(signInMethod.id);
+      <SignInMethodsWrapper>
+        {SIGN_IN_METHODS.map((signInMethod) => {
+          const onlyOneLeft = activeSignInMethods.length === 1;
+          const isEnabled = activeSignInMethods.includes(signInMethod.id);
 
-            return (
-              <li key={signInMethod.id}>
-                {signInMethod.id === "password" ? (
-                  <DefaultLoginToggle
-                    onlyOneLeft={onlyOneLeft}
-                    isEnabled={isEnabled}
-                    signInMethod={signInMethod}
-                    onLink={this.onDefaultLoginLink}
-                    onUnlink={this.onUnlink}
-                  />
-                ) : (
-                  <SocialLoginToggle
-                    onlyOneLeft={onlyOneLeft}
-                    isEnabled={isEnabled}
-                    signInMethod={signInMethod}
-                    onLink={this.onSocialLoginLink}
-                    onUnlink={this.onUnlink}
-                  />
-                )}
-              </li>
-            );
-          })}
-        </ul>
-        {error && error.message}
-      </div>
-    );
-  }
-}
+          return (
+            <div key={signInMethod.id}>
+              {signInMethod.id === "password" ? (
+                <DefaultLoginToggle
+                  onlyOneLeft={onlyOneLeft}
+                  isEnabled={isEnabled}
+                  signInMethod={signInMethod}
+                  onLink={onDefaultLoginLink}
+                  onUnlink={onUnlink}
+                />
+              ) : (
+                <SocialLoginToggle
+                  onlyOneLeft={onlyOneLeft}
+                  isEnabled={isEnabled}
+                  signInMethod={signInMethod}
+                  onLink={onSocialLoginLink}
+                  onUnlink={onUnlink}
+                />
+              )}
+            </div>
+          );
+        })}
+      </SignInMethodsWrapper>
+    </div>
+  );
+};
 
 const SocialLoginToggle = ({
   onlyOneLeft,
@@ -129,78 +138,100 @@ const SocialLoginToggle = ({
   signInMethod,
   onLink,
   onUnlink,
-}) =>
-  isEnabled ? (
-    <button
-      type="button"
-      onClick={() => onUnlink(signInMethod.id)}
-      disabled={onlyOneLeft}
-    >
-      Deactivate {signInMethod.id}
-    </button>
-  ) : (
-    <button type="button" onClick={() => onLink(signInMethod.provider)}>
-      Link {signInMethod.id}
-    </button>
-  );
+}) => (
+  <>
+    <h4 style={{ margin: 0, textAlign: "left" }}>Google Login</h4>
 
-class DefaultLoginToggle extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { password: "", passwordConfirmation: "" };
-  }
-
-  onSubmit = (event) => {
-    event.preventDefault();
-
-    this.props.onLink(this.state.password);
-    this.setState({ password: "", passwordConfirmation: "" });
-  };
-
-  onChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  render() {
-    const { onlyOneLeft, isEnabled, signInMethod, onUnlink } = this.props;
-
-    const { password, passwordConfirmation } = this.state;
-
-    const isInvalid = password !== passwordConfirmation || password === "";
-
-    return isEnabled ? (
+    {isEnabled ? (
       <button
-        type="button"
-        onClick={() => onUnlink(signInMethod.id)}
         disabled={onlyOneLeft}
+        onClick={() => onUnlink(signInMethod.id)}
+        className="pure-button pure-button-primary"
       >
         Deactivate {signInMethod.id}
       </button>
     ) : (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="New Password"
-        />
-        <input
-          name="passwordConfirmation"
-          value={passwordConfirmation}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Confirm New Password"
-        />
+      <button
+        type="button"
+        onClick={() => onLink(signInMethod.provider)}
+        className="pure-button pure-button-primary"
+      >
+        Link {signInMethod.id}
+      </button>
+    )}
+  </>
+);
 
-        <button disabled={isInvalid} type="submit">
-          Link {signInMethod.id}
+const DefaultLoginToggle = ({
+  onLink,
+  onlyOneLeft,
+  isEnabled,
+  signInMethod,
+  onUnlink,
+}) => {
+  const [password, bindPassword, resetPassword] = useFormInput("");
+  const [
+    passwordConfirmation,
+    bindPasswordConfirmation,
+    resetPasswordConfirmation,
+  ] = useFormInput("");
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    onLink(password);
+    resetPassword();
+    resetPasswordConfirmation();
+  };
+
+  const isInvalid = password !== passwordConfirmation || password === "";
+
+  return (
+    <>
+      <h4 style={{ margin: 0, textAlign: "left" }}>
+        Password {"&"} Email Login
+      </h4>
+
+      {isEnabled ? (
+        <button
+          type="button"
+          onClick={() => onUnlink(signInMethod.id)}
+          disabled={onlyOneLeft}
+          className="pure-button pure-button-primary"
+        >
+          Deactivate {signInMethod.id}
         </button>
-      </form>
-    );
-  }
-}
+      ) : (
+        <form className="pure-form inline-form" onSubmit={onSubmit}>
+          <input
+            name="password"
+            {...bindPassword}
+            type="password"
+            placeholder="New Password"
+          />
+          <input
+            name="passwordConfirmation"
+            {...bindPasswordConfirmation}
+            type="password"
+            placeholder="Confirm New Password"
+          />
+
+          <button
+            disabled={isInvalid}
+            type="submit"
+            className="pure-button pure-button-primary"
+          >
+            Link {signInMethod.id}
+          </button>
+        </form>
+      )}
+    </>
+  );
+};
+
+const SignInMethodsWrapper = styled.div`
+  text-align: left;
+`;
 
 const LoginManagement = withFirebase(LoginManagementBase);
 
