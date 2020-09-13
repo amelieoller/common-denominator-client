@@ -68,7 +68,7 @@ const Navbar = ({ location, firebase }) => {
                   </MenuItem>
 
                   <MenuItem path="Sign In" onClick={firebase.doSignOut}>
-                    <i class="fas fa-sign-out-alt"></i>
+                    <i className="fas fa-sign-out-alt"></i>
                     <span>Sign Out</span>
                   </MenuItem>
                 </ul>
@@ -79,7 +79,7 @@ const Navbar = ({ location, firebase }) => {
 
                 <ul className="pure-menu-list">
                   <MenuItem path="Sign In">
-                    <i class="fas fa-sign-in-alt"></i>
+                    <i className="fas fa-sign-in-alt"></i>
                     <span>Sign In</span>
                   </MenuItem>
                 </ul>

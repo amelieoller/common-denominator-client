@@ -9,6 +9,7 @@ import Groups from "./Groups";
 import Items from "./Items";
 import CategoriesPage from "./CategoriesPage";
 import { compose } from "recompose";
+import Spinner from "../atoms/Spinner/Spinner";
 
 class GroupsPage extends Component {
   constructor(props) {
@@ -62,7 +63,7 @@ class GroupsPage extends Component {
       <AuthUserContext.Consumer>
         {(authUser) => (
           <StyledGroupsPage>
-            {loading && <div>Loading ...</div>}
+            {loading && <Spinner />}
 
             {groups && !!groups.length && (
               <Switch>

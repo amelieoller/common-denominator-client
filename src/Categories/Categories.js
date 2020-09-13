@@ -7,6 +7,7 @@ import useCategories from "../hooks/useCategories";
 import Tiles from "../Tiles/Tiles";
 import NewTile from "../NewTile/NewTile";
 import useAuth from "../hooks/useAuth";
+import Spinner from "../atoms/Spinner/Spinner";
 
 const Categories = () => {
   const { categories, addCategory } = useCategories();
@@ -33,7 +34,7 @@ const Categories = () => {
       </Tiles>
     </StyledCategories>
   ) : (
-    "loading"
+    <Spinner />
   );
 };
 

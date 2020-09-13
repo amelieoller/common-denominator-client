@@ -1,31 +1,31 @@
 export const theme = {
-  background: "#f1f1f1",
-  onBackground: "#22343C",
+  // ******** COLORS ********
+  light: "#FFFFFF",
+  // dark: "#454e4f",
+  dark: "#2a3031",
+  grey: "#dee3e3",
+  greyLight: "#f9fbfb",
+  greyDark: "#b6b9b9",
+
+  // primary
+  primary: "#4ECDC4",
+  primaryLight: "#9AD3DA",
+  primaryDark: "#4c9993",
+
+  // secondary
+  secondary: "#FF6B6B",
+  secondaryLight: "#fac9c9",
+  secondaryDark: "#ca3c3c",
+
+  // tertiary
+  tertiary: "#FFE66D",
+  tertiaryLight: "#FFEE99",
+  tertiaryDark: "#FFDD33",
+
+  // ******** SIZES ********
   padding: "15px",
+  paddingLarge: "25px",
+  paddingSmall: "5px",
   borderRadius: "10px",
   borderRadiusSmall: "5px",
-  // onBackgroundLight: "#A4A6B3",
-  // primary: "#7059ff",
-  // primaryFaded: "#8f74ff8a",
-  // primaryDark: "#30208fe3",
-  // surface: "#363740",
-  // onSurface: "#838590",
-  // onSurfacePrimary: "#DDE2FF",
-  // onSurfaceLight: "#9ea1b314",
-  // surfaceTwo: "#f0f2f9",
-  // onSurfaceTwo: "#707178",
-  // onSurfaceTwoPrimary: "#3853ff66",
-  // onSurfaceTwoLight: "#70717814",
-  // onSurfaceThree: "#f0f2f973",
-  // secondary: "#FFC145",
-  // me: "#FF6B6C",
-  // onDanger: "#F7F8FC",
-  // codeBackground: " rgba(9, 30, 66, 0.08)",
-  // borderColor: "#e0e1e5",
-  // spacing: "10px",
-  // spacingLarge: "20px",
-  // spacingExtraLarge: "60px",
-  // phone: `(max-width: 425px)`,
-  // tablet: `(max-width: 768px)`,
-  // desktop: `(max-width: 2560px)`,
 };

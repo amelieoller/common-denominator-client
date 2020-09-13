@@ -37,7 +37,7 @@ const NewTile = ({ handleAddNewItem, placeholderText, buttonText }) => {
               autoFocus
             ></input>
 
-            <span>
+            <ButtonWrapper>
               <button type="submit" className="pure-button pure-button-primary">
                 {buttonText}
               </button>
@@ -49,7 +49,7 @@ const NewTile = ({ handleAddNewItem, placeholderText, buttonText }) => {
               >
                 Discard
               </button>
-            </span>
+            </ButtonWrapper>
           </StyledNewTile>
         </Tile>
       ) : (
@@ -64,16 +64,23 @@ const NewTile = ({ handleAddNewItem, placeholderText, buttonText }) => {
   );
 };
 
+const ButtonWrapper = styled.div`
+  button {
+    margin-right: ${({ theme }) => theme.paddingSmall};
+  }
+`;
+
 const AddWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
-  font-size: 14px;
+  font-size: 15px;
 
   i {
-    font-size: 20px;
+    font-size: 28px;
+    color: ${({ theme }) => theme.secondary};
   }
 `;
 

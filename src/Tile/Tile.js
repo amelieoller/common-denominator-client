@@ -13,14 +13,15 @@ const StyledItemTile = styled.div`
   padding: ${({ theme }) => theme.padding};
   cursor: ${({ isLinkable, addCursor }) =>
     (isLinkable || addCursor) && "pointer"};
-  border: 1px solid #d7d7d7;
+  border: 1px solid ${({ theme }) => theme.grey};
   display: ${({ isLinkable }) => isLinkable && "flex"};
   align-items: ${({ isLinkable }) => isLinkable && "flex-end"};
   justify-content: ${({ isLinkable }) => isLinkable && "space-between"};
 
   h2 {
     margin: 0;
-    color: ${({ isLinkable }) => (isLinkable ? "#1f8dd6" : "black")};
+    color: ${({ isLinkable, theme }) =>
+      isLinkable ? theme.primary : theme.dark};
   }
 
   a {
@@ -28,10 +29,11 @@ const StyledItemTile = styled.div`
   }
 
   &:hover {
-    background: #eee;
+    background: ${({ isLinkable, addCursor, theme }) =>
+      (isLinkable || addCursor) && theme.greyLight};
 
     h2 {
-      text-decoration: ${({ isLinkable }) => isLinkable && "underline"};
+      color: ${({ isLinkable, theme }) => isLinkable && theme.primaryDark};
     }
   }
 `;

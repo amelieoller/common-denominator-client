@@ -4,6 +4,7 @@ import styled from "styled-components/macro";
 
 import Items from "../Items/Items";
 import useCategories from "../hooks/useCategories";
+import Spinner from "../atoms/Spinner";
 
 const ItemsPage = ({ match }) => {
   const [category, setCategory] = useState(null);
@@ -25,7 +26,7 @@ const ItemsPage = ({ match }) => {
       <Items category={category} />
     </StyledItemsPage>
   ) : (
-    "loading"
+    <Spinner />
   );
 };
 

@@ -20,7 +20,10 @@ const Category = ({ group, firebase, category, history }) => {
     <Tile isLinkable onClick={() => routeTo(category)}>
       <h2>{category.title}</h2>
 
-      <button className="pure-button button-error" onClick={handleDelete}>
+      <button
+        className="pure-button button-error icon-button"
+        onClick={(e) => window.confirm("Are you sure?") && handleDelete(e)}
+      >
         <i className="fas fa-trash"></i>
       </button>
     </Tile>

@@ -54,8 +54,11 @@ const FriendCategoryPage = ({ history, friend, user, friendship }) => {
             >
               <h2>{category.title}</h2>
               <button
-                className="pure-button button-error"
-                onClick={(e) => handleDelete(e, category.id)}
+                className="pure-button button-error icon-button"
+                onClick={(e) =>
+                  window.confirm("Are you sure?") &&
+                  handleDelete(e, category.id)
+                }
               >
                 <i className="fas fa-trash"></i>
               </button>

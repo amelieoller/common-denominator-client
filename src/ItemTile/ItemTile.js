@@ -97,14 +97,17 @@ const ItemTile = ({
               type="submit"
               className={
                 saved
-                  ? "pure-button pure-button-disabled"
-                  : "pure-button button-success"
+                  ? "pure-button icon-button pure-button-disabled"
+                  : "pure-button icon-button button-success"
               }
             >
               <i className="fas fa-save"></i>
             </button>
 
-            <button className="pure-button button-error" onClick={handleDelete}>
+            <button
+              className="pure-button button-error icon-button"
+              onClick={handleDelete}
+            >
               <i className="fas fa-trash"></i>
             </button>
           </FormButtons>
@@ -170,15 +173,20 @@ const RatingWrapper = styled.form`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  color: #777;
   font-size: 18px;
   margin-left: 15px;
 
+  input {
+    color: ${({ theme }) => theme.primary};
+  }
+
   i {
     cursor: pointer;
+    font-size: 26px;
+    color: ${({ theme }) => theme.grey};
 
     &:hover {
-      color: #a9a9a9;
+      color: ${({ theme }) => theme.greyDark};
     }
   }
 

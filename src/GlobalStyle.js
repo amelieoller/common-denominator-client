@@ -8,10 +8,11 @@ export default styled.createGlobalStyle`
 
   body {
     font-family: "Roboto", sans-serif;
-    background: ${({ theme }) => theme.background};
-    color: ${({ theme }) => theme.onBackground};
+    background: ${({ theme }) => theme.dark};
+    color: ${({ theme }) => theme.dark};
     line-height: 1.7em;
     font-size: 13px;
+    font-weight: 400;
   }
 
   * {
@@ -26,11 +27,17 @@ export default styled.createGlobalStyle`
   h3,
   h4,
   h5,
-  h6,
-  label {
-    font-family: "Open Sans";
+  h6 {
+    font-family: "Roboto", sans-serif;
     font-weight: bold;
-    color: #34495e;
+    color: ${({ theme }) => theme.light};
+    font-weight: 300;
+  }
+
+  label,
+  input,
+  textarea {
+    color: ${({ theme }) => theme.dark};
   }
 
   h1 {
@@ -73,6 +80,10 @@ export default styled.createGlobalStyle`
     height: auto;
   }
 
+  a {
+    color: ${({ theme }) => theme.secondary};
+  }
+
   /*
  * -- LAYOUT STYLES --
  * These are some useful classes which I will need
@@ -100,11 +111,14 @@ export default styled.createGlobalStyle`
   }
 
   .pure-form input[type] {
-    border: 2px solid #ddd;
+    border: 1px solid #ddd;
     box-shadow: none;
     font-size: 100%;
     width: 100%;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 
   /*
@@ -120,15 +134,24 @@ export default styled.createGlobalStyle`
     padding: 0.35em 0.75em;
   }
 
-  a.pure-button-primary {
-    /* background: white;
-    color: #1f8dd6;
-    border-radius: 5px;
-    font-size: 120%; */
+  .pure-button-primary {
+    background: transparent;
+    color: ${({ theme }) => theme.primary};
+    border: 1px solid;
+    /* font-size: 120%; */
+
+    &:hover,
+    &:focus {
+      background-image: none;
+      background: ${({ theme }) => theme.secondary};
+      border-color: ${({ theme }) => theme.secondaryDark};
+      color: ${({ theme }) => theme.light};
+    }
   }
 
-  .pure-button-disabled {
-    border: 1px solid;
+  .pure-button-disabled,
+  .pure-button[disabled] {
+    border: 1px solid #4ecdc4;
   }
 
   .button-success,
@@ -136,50 +159,41 @@ export default styled.createGlobalStyle`
   .button-warning,
   .button-secondary {
     color: white;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    text-shadow: none;
   }
 
   .button-success {
-    border: 1px solid rgb(28, 184, 65);
-    color: rgb(28, 184, 65);
+    border: 1px solid ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.primary};
     background: transparent;
-
-    &:hover {
-      background: rgb(28, 184, 65);
-      color: white;
-    }
   }
 
   .button-error {
-    border: 1px solid rgb(202, 60, 60);
-    color: rgb(202, 60, 60);
+    border: 1px solid ${({ theme }) => theme.secondary};
+    color: ${({ theme }) => theme.secondary};
     background: transparent;
-
-    &:hover {
-      background: rgb(202, 60, 60);
-      color: white;
-    }
   }
 
   .button-warning {
     border: 1px solid rgb(223, 117, 20);
     color: rgb(223, 117, 20);
     background: transparent;
-
-    &:hover {
-      background: rgb(223, 117, 20);
-      color: white;
-    }
   }
 
   .button-secondary {
     border: 2px solid rgb(66, 184, 221);
     color: rgb(66, 184, 221);
     background: transparent;
+  }
+
+  .icon-button {
+    border: none;
+    padding: 0;
+    background: none;
 
     &:hover {
-      background: rgb(66, 184, 221);
-      color: white;
+      opacity: 0.8;
+      background-image: none;
     }
   }
 
@@ -193,8 +207,9 @@ export default styled.createGlobalStyle`
     text-align: center;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   }
+
   .home-menu {
-    background: #2d3e50;
+    background: ${({ theme }) => theme.primary};
   }
   .pure-menu.pure-menu-fixed {
     /* Fixed menus normally have a border at the bottom. */
@@ -214,17 +229,18 @@ export default styled.createGlobalStyle`
   }
 
   .home-menu .pure-menu-selected a:visited {
-    color: white;
+    color: ${({ theme }) => theme.dark};
   }
 
   .home-menu a {
-    color: #6fbef3;
+    color: ${({ theme }) => theme.light};
   }
+
   .home-menu li a:hover,
   .home-menu li a:focus {
     background: none;
     border: none;
-    color: #aecfe5;
+    color: ${({ theme }) => theme.secondary};
   }
 
   /*
@@ -248,7 +264,7 @@ export default styled.createGlobalStyle`
 
   .splash {
     /* absolute center .splash within .splash-container */
-    width: 80%;
+    width: 50%;
     height: 50%;
     margin: auto;
     position: absolute;
@@ -257,6 +273,12 @@ export default styled.createGlobalStyle`
     bottom: 0;
     right: 0;
     text-align: center;
+  }
+
+  .notification {
+    color: ${({ theme }) => theme.secondary};
+    font-style: italic;
+    font-size: 14px;
   }
 
   /* This is the main heading that appears on the blue section */
@@ -299,9 +321,7 @@ export default styled.createGlobalStyle`
 
   /* This is the class used for the main content headers (<h2>) */
   .content-head {
-    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
   }
 
   /* This is a modifier class used when the content-head is inside a ribbon */
@@ -359,7 +379,7 @@ export default styled.createGlobalStyle`
     /* We decrease the width of the .splash, since we have more width
     to work with */
     .splash {
-      width: 50%;
+      width: 40%;
       height: 60%;
     }
 
