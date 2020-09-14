@@ -22,9 +22,6 @@ class Groups extends Component {
         },
       ],
       createdAt: this.props.firebase.fieldValue.serverTimestamp(),
-      randomness: 1,
-      harmony: 1,
-      vetoes: 1,
     });
 
     this.setState({ title: "" });
@@ -56,16 +53,17 @@ class Groups extends Component {
         {!groups && <div>There are no groups ...</div>}
 
         <Tiles>
-          {groups.map((group) => (
-            <GroupItem
-              authUser={authUser}
-              key={group.uid}
-              group={group}
-              onEditGroup={this.onEditGroup}
-              onRemoveGroup={this.onRemoveGroup}
-              history={this.props.history}
-            />
-          ))}
+          {groups &&
+            groups.map((group) => (
+              <GroupItem
+                authUser={authUser}
+                key={group.uid}
+                group={group}
+                onEditGroup={this.onEditGroup}
+                onRemoveGroup={this.onRemoveGroup}
+                history={this.props.history}
+              />
+            ))}
 
           <NewTile
             handleAddNewItem={this.onCreateGroup}

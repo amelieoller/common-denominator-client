@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import NewTile from "../NewTile/NewTile";
-import GroupSettingsTile from "./GroupSettingsTile";
 import Tiles from "../Tiles/Tiles";
 import Category from "./Category";
 import { formatNames } from "../utils";
@@ -17,6 +16,10 @@ const Categories = ({ group, firebase, categories, history }) => {
     firebase.categories(group.uid).add({
       title: text,
       createdAt: firebase.fieldValue.serverTimestamp(),
+      membersFinished: [],
+      randomness: 1,
+      harmony: 1,
+      vetoes: 1,
     });
   };
 
@@ -45,7 +48,6 @@ const Categories = ({ group, firebase, categories, history }) => {
           placeholderText="Add New Category"
           buttonText="Add"
         />
-        <GroupSettingsTile group={group} firebase={firebase} />
       </Tiles>
     </div>
   );

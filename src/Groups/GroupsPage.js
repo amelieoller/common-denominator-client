@@ -12,8 +12,8 @@ import { compose } from "recompose";
 import Spinner from "../atoms/Spinner/Spinner";
 
 class GroupsPage extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       loading: false,
@@ -27,6 +27,7 @@ class GroupsPage extends Component {
 
   onListenForGroups = () => {
     this.setState({ loading: true });
+    console.log(this.props.authUser);
 
     const userId = JSON.parse(localStorage.authUser).uid;
 
@@ -109,6 +110,8 @@ class GroupsPage extends Component {
 
 const StyledGroupsPage = styled.div`
   padding: ${({ theme }) => theme.padding};
+  max-width: 1400px;
+  margin: 0 auto;
 `;
 
 const condition = (authUser) => !!authUser;

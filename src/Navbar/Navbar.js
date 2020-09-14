@@ -31,7 +31,9 @@ const Navbar = ({ location, firebase }) => {
 
     return (
       <StyledMenuItem
-        className={currentPath === ROUTES[routePath] ? selectedItem : menuItem}
+        className={
+          currentPath.includes(ROUTES[routePath]) ? selectedItem : menuItem
+        }
         onClick={onClick}
       >
         <ButtonWrapper to={ROUTES[routePath]} className="pure-menu-link">

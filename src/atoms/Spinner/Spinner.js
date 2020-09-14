@@ -1,9 +1,9 @@
 import React from "react";
 import styled, { keyframes } from "styled-components/macro";
 
-const Spinner = () => {
+const Spinner = ({ small }) => {
   return (
-    <StyledSpinner>
+    <StyledSpinner small={small}>
       <div className="bounce1"></div>
       <div className="bounce2"></div>
       <div className="bounce3"></div>
@@ -25,9 +25,9 @@ const bounceDelay = keyframes`
 `;
 
 const StyledSpinner = styled.div`
-  width: 100px;
+  width: ${({ small }) => !small && "100px"};
   text-align: center;
-  position: absolute;
+  position: ${({ small }) => !small && "absolute"};
   top: 40%;
   left: 0;
   bottom: 0;
@@ -35,10 +35,11 @@ const StyledSpinner = styled.div`
   margin: auto;
 
   > div {
-    width: 18px;
-    height: 18px;
-    margin: 5px;
-    background-color: ${({ theme }) => theme.secondary};
+    width: ${({ small }) => (small ? "10px" : "18px")};
+    height: ${({ small }) => (small ? "10px" : "18px")};
+    margin: ${({ small }) => (small ? "2px" : "5px")};
+    background-color: ${({ theme, small }) =>
+      small ? theme.primary : theme.secondary};
 
     border-radius: 100%;
     display: inline-block;

@@ -273,7 +273,8 @@ export default styled.createGlobalStyle`
 
   .splash {
     /* absolute center .splash within .splash-container */
-    width: 50%;
+    width: 70%;
+    max-width: 550px;
     height: 70%;
     margin: auto;
     position: absolute;
@@ -386,18 +387,6 @@ export default styled.createGlobalStyle`
     }
     .home-menu ul {
       float: right;
-    }
-
-    /* We increase the height of the splash-container */
-    /*    .splash-container {
-        height: 500px;
-    }*/
-
-    /* We decrease the width of the .splash, since we have more width
-    to work with */
-    .splash {
-      width: 40%;
-      height: 70%;
     }
 
     .splash-head {
